@@ -201,6 +201,21 @@ h1 {
     word-wrap: break-word;
 }
 
+.vietnam-style {
+    font-family: 'Shalimar', cursive;
+    font-size: 1.4em;
+}
+
+.speaker-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.speaker-icon:hover {
+    color: #fff;
+}
+
 /* ===== NOTIFICATION ===== */
 .notification {
     display: none;

@@ -30,7 +30,12 @@ Promise.all([
     querySnapshot.forEach((doc) => {
         const data = doc.data();
         const item = document.createElement('div');
-        item.innerHTML = `<div style="text-align: center;">${data.chinese}</div><div>含义: ${data.meaning}<br>拼音: ${data.pinyin}<br>汉越音: ${data.hanviet || ''}</div>`;
+        item.innerHTML = `<div style="text-align: center; font-size: 1.2em;">${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
+        item.querySelector('.speaker-icon').addEventListener('click', () => {
+            const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(data.chinese)}&tl=zh-CN&client=tw-ob`;
+            const audio = new Audio(url);
+            audio.play();
+        });
         list.appendChild(item);
     });
 }).catch((error) => {
