@@ -102,6 +102,8 @@ document.getElementById('edit-vocab-form-element').addEventListener('submit', as
     const hanviet = document.getElementById('edit-hanviet').value;
     const audioFile = document.getElementById('edit-audio').files[0];
 
+    document.getElementById('spinner').style.display = 'block';
+
     try {
         let audioUrl = null;
         if (audioFile) {
@@ -128,6 +130,8 @@ document.getElementById('edit-vocab-form-element').addEventListener('submit', as
 
         await db.collection('vocabularies').doc(docId).update(updateData);
 
+        document.getElementById('spinner').style.display = 'none';
+
         // Close modal
         document.getElementById('edit-vocab-form').style.display = 'none';
         document.getElementById('edit-vocab-form-element').reset();
@@ -136,6 +140,7 @@ document.getElementById('edit-vocab-form-element').addEventListener('submit', as
         location.reload(); // Simple way to refresh
 
     } catch (error) {
+        document.getElementById('spinner').style.display = 'none';
       console.error('更新词汇失败：', error);
       alert('更新词汇失败。');
     }
@@ -178,6 +183,7 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
             notification.style.display = 'none';
             document.getElementById('vocab-form').style.display = 'none';
             document.getElementById('vocab-form-element').reset();
+            location.reload(); // Reload page after adding new vocab
         }, 1000);
     } catch (error) {
         console.error('添加词汇时出错:', error);
