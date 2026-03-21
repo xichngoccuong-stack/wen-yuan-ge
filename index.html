@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文渊阁 - Văn Uyên Các</title>
     <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -14,12 +17,46 @@
             <img src="logo.ico" alt="Logo">
             <h1>Vaên Uyeân Caùc</h1>
         </div>
+    
+        <div class="menu-container">
+            <button id="menu-button" style="background: transparent; border: none; color: white; font-size: 30px; cursor: pointer;">☰</button>
+            <div id="menu-dropdown" class="menu-dropdown">
+                <ul>
+                    <li><a href="#" id="add-vocab-link">生词</a></li>
+                </ul>
+            </div>
+        </div>
     </header>
-
-    <!-- Background -->
+    
+        <!-- Vocabulary Form -->
+        <div id="vocab-form" class="vocab-form">
+            <h2>添加词汇</h2>
+            <form id="vocab-form-element">
+                <label for="chinese">中文词语:</label>
+                <input type="text" id="chinese" required>
+                <label for="meaning">含义:</label>
+                <input type="text" id="meaning" required>
+                <label for="pinyin">拼音:</label>
+                <input type="text" id="pinyin" required>
+                <label for="hanviet">汉越音:</label>
+                <input type="text" id="hanviet">
+                <div class="button-row">
+                    <button type="submit">添加</button>
+                    <button type="button" id="close-form">关闭</button>
+                </div>
+            </form>
+        </div>
+    
+        <!-- Background -->
     <img id="image" src="background.png" alt="Hình nền">
     <video id="video" src="background.mp4" muted autoplay loop></video>
 
     <script src="script.js"></script>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">词汇已成功添加！</div>
+
+    <!-- Vocabulary List -->
+    <div id="vocab-list" class="vocab-list"></div>
 </body>
 </html>

@@ -46,6 +46,8 @@ header {
 
     background: transparent;
 
+    display: none;
+
     z-index: 100;
 }
 
@@ -75,4 +77,142 @@ h1 {
     letter-spacing: 3px;
     font-family: 'VNI-Thuphap', cursive;
     font-weight: normal;
+}
+
+/* ===== MENU ===== */
+.menu-container {
+    position: fixed;
+    top: 120px;
+    left: 20px;
+}
+
+.menu-button {
+    box-shadow: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background: transparent;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 150;
+}
+
+.menu-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-dropdown li {
+    margin: 5px 0;
+}
+
+.menu-dropdown a {
+    color: white;
+    text-decoration: none;
+    font-family: 'Ma Shan Zheng', sans-serif;
+    white-space: nowrap;
+    font-size: 20px;
+}
+
+/* ===== VOCAB FORM ===== */
+.vocab-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    color: white;
+    font-family: 'Ma Shan Zheng', sans-serif;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 200;
+}
+
+.vocab-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.vocab-form label {
+    margin-top: 10px;
+}
+
+.vocab-form input {
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.vocab-form h2 {
+    text-align: center;
+}
+
+.vocab-form button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'Ma Shan Zheng', sans-serif;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ===== VOCAB LIST ===== */
+.vocab-list {
+    position: absolute;
+    top: 156px;
+    left: 50px;
+    color: white;
+    font-family: 'Ma Shan Zheng', sans-serif;
+    font-size: 18px;
+    max-height: 70vh;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: calc(100vw - 100px);
+    max-width: 1200px;
+    background: transparent;
+}
+
+.vocab-list div {
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+/* ===== NOTIFICATION ===== */
+.notification {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Ma Shan Zheng', sans-serif;
+    font-size: 18px;
+    z-index: 300;
 }
