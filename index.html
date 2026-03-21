@@ -41,13 +41,36 @@
                 <input type="text" id="pinyin" required>
                 <label for="hanviet">汉越音:</label>
                 <input type="text" id="hanviet">
+                <label for="audio">MP3 文件发音（可选）：</label>
+                <input type="file" id="audio" accept="audio/mp3">
                 <div class="button-row">
                     <button type="submit">添加</button>
                     <button type="button" id="close-form">关闭</button>
                 </div>
             </form>
         </div>
-    
+
+        <!-- Edit Vocabulary Form -->
+        <div id="edit-vocab-form" class="vocab-form" style="display: none;">
+            <h2>编辑词汇</h2>
+            <form id="edit-vocab-form-element">
+                <label for="edit-chinese">中文词语:</label>
+                <input type="text" id="edit-chinese" required>
+                <label for="edit-meaning">含义:</label>
+                <input type="text" id="edit-meaning" required>
+                <label for="edit-pinyin">拼音:</label>
+                <input type="text" id="edit-pinyin" required>
+                <label for="edit-hanviet">汉越音:</label>
+                <input type="text" id="edit-hanviet">
+                <label for="edit-audio">MP3 文件发音（可选）：</label>
+                <input type="file" id="edit-audio" accept="audio/mp3">
+                <div class="button-row">
+                    <button type="submit">更新</button>
+                    <button type="button" id="close-edit-form">关闭</button>
+                </div>
+            </form>
+        </div>
+
         <!-- Background -->
     <img id="image" src="background.png" alt="Hình nền">
     <video id="video" src="background.mp4" muted autoplay loop></video>
