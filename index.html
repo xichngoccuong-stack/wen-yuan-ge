@@ -128,6 +128,36 @@
             </div>
         </div>
 
+        <!-- Read Vocab Modal -->
+        <div id="read-vocab-modal" class="vocab-form" style="display: none;">
+            <h2>检查词汇(读)</h2>
+            <div id="read-vocab-content">
+                <div id="current-word">
+                    <div class="word-display">
+                        <p>中文词语: <span id="word-chinese"></span></p>
+                    </div>
+                    <div class="word-options" style="margin-top: 20px;">
+                        <p>请选择对应的含义:</p>
+                        <div class="button-row">
+                            <button type="button" class="option-btn" id="option-1"></button>
+                            <button type="button" class="option-btn" id="option-2"></button>
+                        </div>
+                        <div class="button-row">
+                            <button type="button" class="option-btn" id="option-3"></button>
+                            <button type="button" class="option-btn" id="option-4"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-row" style="margin-top: 20px;">
+                    <button type="button" id="prev-word" disabled>上一词</button>
+                    <button type="button" id="next-word">下一词</button>
+                </div>
+            </div>
+            <div class="button-row" style="margin-top: 20px; justify-content: center;">
+                <button type="button" id="close-read-modal">关闭</button>
+            </div>
+        </div>
+
         <!-- Background -->
     <img id="image" src="background.png" alt="背景图像">
     <video id="video" src="background.mp4" muted autoplay loop></video>

@@ -73,6 +73,7 @@ Promise.all([
     }
 
     displayVocabularies(vocabularies);
+    window.vocabularies = vocabularies; // Make vocabularies global for read modal
 
     // Search functionality
     document.getElementById('search-input').addEventListener('input', (e) => {
@@ -105,6 +106,157 @@ Promise.all([
     });
 }).catch((error) => {
     console.error('添加词汇时出错:', error);
+});
+
+// Read modal functionality
+let currentReadWords = [];
+let currentReadIndex = 0;
+let userAnswers = [];
+let selectedForCurrent = false;
+
+document.getElementById('read-btn').addEventListener('click', async function() {
+    const docRef = db.collection('quiz-settings').doc('settings');
+    const doc = await docRef.get();
+    let numWords = Infinity;
+    let category = '';
+    if (doc.exists) {
+        const data = doc.data();
+        numWords = data.numWords ? parseInt(data.numWords) : Infinity;
+        category = data.category || '';
+    }
+    let filteredVocabs = window.vocabularies;
+    if (category && category !== '全部') {
+        filteredVocabs = window.vocabularies.filter(v => v.category === category);
+    }
+    // Always shuffle to randomize the list
+    if (filteredVocabs.length > 1) {
+        const shuffled = [...filteredVocabs].sort(() => 0.5 - Math.random());
+        filteredVocabs = shuffled;
+    }
+    if (numWords && numWords < filteredVocabs.length) {
+        filteredVocabs = filteredVocabs.slice(0, numWords);
+    }
+    if (filteredVocabs.length === 0) {
+        alert('No vocabularies found for the selected category.');
+        return;
+    }
+    currentReadWords = filteredVocabs;
+    currentReadIndex = 0;
+    showCurrentWord();
+    document.getElementById('read-vocab-modal').style.display = 'block';
+    document.getElementById('check-vocab-modal').style.display = 'none';
+    document.getElementById('vocab-list').style.display = 'none';
+    // Hide search and filter
+    document.querySelector('.search-filter-row').style.display = 'none';
+    document.querySelector('.menu-container').style.display = 'none';
+    // Disable menu button
+    document.getElementById('menu-button').style.pointerEvents = 'none';
+    document.getElementById('menu-button').style.opacity = '0.5';
+});
+
+function showCurrentWord() {
+    const word = currentReadWords[currentReadIndex];
+    document.getElementById('word-chinese').textContent = word.chinese;
+    document.getElementById('prev-word').disabled = currentReadIndex === 0;
+    document.getElementById('next-word').disabled = currentReadIndex === currentReadWords.length - 1;
+
+    // Generate 4 options: 1 correct, 3 random from other vocabularies
+    const options = [word.meaning];
+    const otherVocabs = window.vocabularies.filter(v => v.meaning !== word.meaning);
+    const shuffledOthers = otherVocabs.sort(() => 0.5 - Math.random()).slice(0, 3);
+    options.push(...shuffledOthers.map(v => v.meaning));
+    // Shuffle options
+    const shuffledOptions = options.sort(() => 0.5 - Math.random());
+    // Store correct answer index
+    window.correctIndex = shuffledOptions.indexOf(word.meaning);
+    // Update buttons
+    for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`option-${i}`);
+        btn.textContent = shuffledOptions[i - 1];
+        btn.style.background = '';
+        btn.style.backgroundColor = '';
+        btn.disabled = false;
+    }
+    selectedForCurrent = false;
+
+    // If last word, change close button to "关闭"
+    if (currentReadIndex === currentReadWords.length - 1) {
+        document.getElementById('close-read-modal').textContent = '查看结果';
+    } else {
+        document.getElementById('close-read-modal').textContent = '关闭';
+    }
+}
+
+// Option button event listeners
+for (let i = 1; i <= 4; i++) {
+    document.getElementById(`option-${i}`).addEventListener('click', function() {
+        const selectedMeaning = this.textContent;
+        const word = currentReadWords[currentReadIndex];
+        const isCorrect = selectedMeaning === word.meaning;
+        userAnswers[currentReadIndex] = {
+            word: word.chinese,
+            selectedMeaning: selectedMeaning,
+            correct: isCorrect
+        };
+        // Reset all options background
+        for (let j = 1; j <= 4; j++) {
+            document.getElementById(`option-${j}`).style.background = '';
+        }
+        // Highlight selected option
+        this.style.background = 'linear-gradient(to right, orange, red)';
+        selectedForCurrent = true;
+        document.getElementById('next-word').disabled = currentReadIndex === currentReadWords.length - 1;
+    });
+}
+
+document.getElementById('prev-word').addEventListener('click', function() {
+    if (currentReadIndex > 0) {
+        currentReadIndex--;
+        showCurrentWord();
+    }
+});
+
+document.getElementById('next-word').addEventListener('click', function() {
+    if (currentReadIndex < currentReadWords.length - 1) {
+        currentReadIndex++;
+        showCurrentWord();
+    }
+});
+
+document.getElementById('close-read-modal').addEventListener('click', function() {
+    if (currentReadIndex === currentReadWords.length - 1) {
+        // Check all answers
+        const wrongAnswers = userAnswers.filter(a => !a.correct);
+        let resultHTML = '';
+        if (wrongAnswers.length === 0) {
+            resultHTML = '<p>Hoàn thành! Tất cả đúng.</p>';
+        } else {
+            resultHTML = '<p>Các từ sai:</p><ul>';
+            wrongAnswers.forEach(a => {
+                resultHTML += `<li>Từ: ${a.word} - Chọn: ${a.selectedMeaning}</li>`;
+            });
+            resultHTML += '</ul>';
+        }
+        // Update modal content
+        document.getElementById('word-chinese').textContent = 'Kết quả:';
+        document.getElementById('read-vocab-content').innerHTML = resultHTML;
+        // Hide options
+        document.querySelectorAll('.option-btn').forEach(btn => btn.style.display = 'none');
+        document.getElementById('prev-word').style.display = 'none';
+        document.getElementById('next-word').style.display = 'none';
+        // Change button to "关闭" for reload
+        document.getElementById('close-read-modal').textContent = '关闭';
+    } else {
+        document.getElementById('read-vocab-modal').style.display = 'none';
+        document.getElementById('vocab-list').style.display = 'block';
+        // Show search and filter
+        document.querySelector('.search-filter-row').style.display = 'flex';
+        document.querySelector('.menu-container').style.display = 'block';
+        // Enable menu button
+        document.getElementById('menu-button').style.pointerEvents = 'auto';
+        document.getElementById('menu-button').style.opacity = '1';
+        location.reload(); // Reload page when closing modal
+    }
 });
 
 // Menu toggle

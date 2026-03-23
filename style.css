@@ -317,3 +317,40 @@ h1 {
     pointer-events: none;
 }
 
+/* ===== OPTION BUTTONS ===== */
+.vocab-form .option-btn {
+    font-family: 'Shalimar', cursive !important;
+    font-size: 1.2em;
+    padding: 15px;
+    margin: 5px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 5px;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: visible;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+/* Read Vocab Modal transparent background */
+#read-vocab-modal {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: black !important;
+}
+
+/* Word Chinese color */
+#word-chinese {
+    background: linear-gradient(to right, orange, red);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
