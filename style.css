@@ -303,3 +303,10 @@ h1 {
     0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
+
+/* ===== DIMMED CLASS ===== */
+.dimmed {
+    opacity: 0.5;
+    pointer-events: none;
+}
+

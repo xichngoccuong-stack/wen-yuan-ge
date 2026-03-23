@@ -110,7 +110,34 @@ Promise.all([
 // Menu toggle
 document.getElementById('menu-button').addEventListener('click', function() {
     const dropdown = document.getElementById('menu-dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    const searchInput = document.getElementById('search-input');
+    const categoryFilter = document.getElementById('category-filter');
+    const vocabList = document.getElementById('vocab-list');
+
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+        searchInput.classList.remove('dimmed');
+        categoryFilter.classList.remove('dimmed');
+        vocabList.classList.remove('dimmed');
+    } else {
+        dropdown.style.display = 'block';
+        searchInput.classList.add('dimmed');
+        categoryFilter.classList.add('dimmed');
+        vocabList.classList.add('dimmed');
+    }
+});
+
+// Check vocab modal toggle
+document.getElementById('check-vocab-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('check-vocab-modal').style.display = 'block';
+    document.getElementById('menu-dropdown').style.display = 'none';
+    // Keep dimmed
+});
+
+// Close check vocab modal
+document.getElementById('close-check-vocab-modal').addEventListener('click', function() {
+    document.getElementById('check-vocab-modal').style.display = 'none';
 });
 
 // Show vocab form
@@ -118,6 +145,9 @@ document.getElementById('add-vocab-link').addEventListener('click', function(e) 
     e.preventDefault();
     document.getElementById('vocab-form').style.display = 'block';
     document.getElementById('menu-dropdown').style.display = 'none';
+    document.getElementById('search-input').classList.remove('dimmed');
+    document.getElementById('category-filter').classList.remove('dimmed');
+    document.getElementById('vocab-list').classList.remove('dimmed');
 });
 
 // Close vocab form
@@ -136,6 +166,9 @@ document.getElementById('setup-quiz-link').addEventListener('click', async funct
     e.preventDefault();
     document.getElementById('quiz-settings-form').style.display = 'block';
     document.getElementById('menu-dropdown').style.display = 'none';
+    document.getElementById('search-input').classList.remove('dimmed');
+    document.getElementById('category-filter').classList.remove('dimmed');
+    document.getElementById('vocab-list').classList.remove('dimmed');
     const docRef = db.collection('quiz-settings').doc('settings');
     const doc = await docRef.get();
     if (doc.exists) {
