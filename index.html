@@ -24,6 +24,7 @@
             <div id="menu-dropdown" class="menu-dropdown">
                 <ul>
                     <li><a href="#" id="add-vocab-link">生词</a></li>
+                    <li><a href="#" id="setup-quiz-link">设置检查</a></li>
                 </ul>
             </div>
         </div>
@@ -88,6 +89,26 @@
                 <div class="button-row">
                     <button type="submit">更新</button>
                     <button type="button" id="close-edit-form">关闭</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quiz Settings Modal -->
+        <div id="quiz-settings-form" class="vocab-form" style="display: none;">
+            <h2>设置检查</h2>
+            <form id="quiz-settings-form-element">
+                <label for="num-words">词汇数:</label>
+                <input type="number" id="num-words">
+                <label for="quiz-category">类别:</label>
+                <select id="quiz-category">
+                    <option value="全部" selected>全部</option>
+                    <option value="生活">生活</option>
+                    <option value="工作">工作</option>
+                    <option value="学习">学习</option>
+                </select>
+                <div class="button-row">
+                    <button type="submit">保存</button>
+                    <button type="button" id="close-quiz-form">关闭</button>
                 </div>
             </form>
         </div>

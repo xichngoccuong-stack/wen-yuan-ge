@@ -131,6 +131,53 @@ document.getElementById('close-edit-form').addEventListener('click', function() 
     document.getElementById('edit-vocab-form-element').reset();
 });
 
+// Show quiz settings form
+document.getElementById('setup-quiz-link').addEventListener('click', async function(e) {
+    e.preventDefault();
+    document.getElementById('quiz-settings-form').style.display = 'block';
+    document.getElementById('menu-dropdown').style.display = 'none';
+    const docRef = db.collection('quiz-settings').doc('settings');
+    const doc = await docRef.get();
+    if (doc.exists) {
+        const data = doc.data();
+        document.getElementById('num-words').value = data.numWords || '';
+        document.getElementById('quiz-category').value = data.category || '';
+    }
+});
+
+// Close quiz settings form
+document.getElementById('close-quiz-form').addEventListener('click', function() {
+    document.getElementById('quiz-settings-form').style.display = 'none';
+    document.getElementById('quiz-settings-form-element').reset();
+});
+
+// Submit quiz settings form
+document.getElementById('quiz-settings-form-element').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const numWords = document.getElementById('num-words').value;
+    const category = document.getElementById('quiz-category').value;
+    const docRef = db.collection('quiz-settings').doc('settings');
+    const doc = await docRef.get();
+    if (doc.exists) {
+        await docRef.update({
+            numWords: numWords,
+            category: category
+        });
+    } else {
+        await docRef.set({
+            numWords: numWords,
+            category: category
+        });
+    }
+    document.getElementById('quiz-settings-form').style.display = 'none';
+    document.getElementById('quiz-settings-form-element').reset();
+    document.getElementById('notification').innerHTML = '设置已保存！';
+    document.getElementById('notification').style.display = 'block';
+    setTimeout(() => {
+        document.getElementById('notification').style.display = 'none';
+    }, 1000);
+});
+
 // Submit edit vocab form
 document.getElementById('edit-vocab-form-element').addEventListener('submit', async function(e) {
     e.preventDefault();
