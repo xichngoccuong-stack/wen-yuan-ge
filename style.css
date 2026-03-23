@@ -120,7 +120,7 @@ h1 {
 .search-filter-row {
     position: fixed;
     top: 130px;
-    left: 55px;
+    left: 62px;
     display: flex;
     gap: 10px;
     align-items: center;
@@ -128,7 +128,7 @@ h1 {
 
 /* ===== SEARCH INPUT ===== */
 .search-input {
-    width: 170px;
+    width: 163px;
     height: 13px;
     padding: 5px;
     border: 1px solid rgba(255,255,255,0.5);
