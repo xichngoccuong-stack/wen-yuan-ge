@@ -187,8 +187,7 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    width: calc(100vw - 100px);
-    max-width: 1200px;
+    width: 100vw;
     background: transparent;
 }
 

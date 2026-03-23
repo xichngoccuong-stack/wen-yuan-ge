@@ -22,7 +22,7 @@ document.querySelector('header').style.display = 'none';
 Promise.all([
     new Promise(resolve => setTimeout(resolve, 2000)),
     document.fonts.ready,
-    db.collection('vocabularies').get()
+    db.collection('vocabularies').orderBy('hanviet').get()
 ]).then(([timeout, fonts, querySnapshot]) => {
     document.getElementById('image').style.display = 'none';
     document.getElementById('video').style.display = 'block';
@@ -35,7 +35,7 @@ Promise.all([
         const data = doc.data();
         const item = document.createElement('div');
         item.setAttribute('data-doc-id', doc.id);
-        item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
+        item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet && data.hanviet !== data.meaning ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
         item.querySelector('.speaker-icon').addEventListener('click', () => {
             if (data.audioUrl) {
                 const audio = new Audio(data.audioUrl);
