@@ -155,6 +155,8 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
     const hanviet = document.getElementById('hanviet').value;
     const audioFile = document.getElementById('audio').files[0];
 
+    document.getElementById('spinner').style.display = 'block';
+
     try {
         let audioUrl = null;
         if (audioFile) {
@@ -180,12 +182,14 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
         const notification = document.getElementById('notification');
         notification.style.display = 'block';
         setTimeout(() => {
+            document.getElementById('spinner').style.display = 'none';
             notification.style.display = 'none';
             document.getElementById('vocab-form').style.display = 'none';
             document.getElementById('vocab-form-element').reset();
             location.reload(); // Reload page after adding new vocab
         }, 1000);
     } catch (error) {
+        document.getElementById('spinner').style.display = 'none';
         console.error('添加词汇时出错:', error);
         alert('添加词汇时发生错误。');
     }
