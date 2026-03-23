@@ -270,6 +270,7 @@ document.getElementById('close-read-modal').addEventListener('click', function()
         // Enable menu button
         document.getElementById('menu-button').style.pointerEvents = 'auto';
         document.getElementById('menu-button').style.opacity = '1';
+        document.getElementById('spinner').style.display = 'block';
         location.reload(); // Reload page when closing modal
     } else if (currentReadIndex === currentReadWords.length - 1) {
         // Check if all answers are provided
@@ -281,7 +282,7 @@ document.getElementById('close-read-modal').addEventListener('click', function()
         const wrongAnswers = userAnswers.filter(a => !a.correct);
         let resultHTML = '';
         if (wrongAnswers.length === 0) {
-            resultHTML = '<p>完成！全部正确。</p>';
+            resultHTML = '<p style="text-align: center;">完成！全部正确。</p>';
         } else {
             resultHTML = '<p>错误的词：</p><ul>';
             wrongAnswers.forEach(a => {
@@ -315,6 +316,7 @@ document.getElementById('close-read-modal').addEventListener('click', function()
         // Enable menu button
         document.getElementById('menu-button').style.pointerEvents = 'auto';
         document.getElementById('menu-button').style.opacity = '1';
+        document.getElementById('spinner').style.display = 'block';
         location.reload(); // Reload page when closing modal
     }
 });
@@ -350,6 +352,9 @@ document.getElementById('check-vocab-link').addEventListener('click', function(e
 // Close check vocab modal
 document.getElementById('close-check-vocab-modal').addEventListener('click', function() {
     document.getElementById('check-vocab-modal').style.display = 'none';
+    document.getElementById('search-input').classList.remove('dimmed');
+    document.getElementById('category-filter').classList.remove('dimmed');
+    document.getElementById('vocab-list').classList.remove('dimmed');
 });
 
 // Show vocab form
