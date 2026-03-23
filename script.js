@@ -113,6 +113,7 @@ let currentReadWords = [];
 let currentReadIndex = 0;
 let userAnswers = [];
 let selectedForCurrent = false;
+let resultShown = false;
 
 document.getElementById('read-btn').addEventListener('click', async function() {
     const docRef = db.collection('quiz-settings').doc('settings');
@@ -152,13 +153,17 @@ document.getElementById('read-btn').addEventListener('click', async function() {
     // Disable menu button
     document.getElementById('menu-button').style.pointerEvents = 'none';
     document.getElementById('menu-button').style.opacity = '0.5';
+    resultShown = false;
 });
 
 function showCurrentWord() {
     const word = currentReadWords[currentReadIndex];
-    document.getElementById('word-chinese').textContent = word.chinese;
-    document.getElementById('prev-word').disabled = currentReadIndex === 0;
-    document.getElementById('next-word').disabled = currentReadIndex === currentReadWords.length - 1;
+    const wordChinese = document.getElementById('word-chinese');
+    if (wordChinese) wordChinese.textContent = word.chinese;
+    const prevBtn = document.getElementById('prev-word');
+    if (prevBtn) prevBtn.disabled = currentReadIndex === 0;
+    const nextBtn = document.getElementById('next-word');
+    if (nextBtn) nextBtn.disabled = currentReadIndex === currentReadWords.length - 1;
 
     // Generate 4 options: 1 correct, 3 random from other vocabularies
     const options = [word.meaning];
@@ -172,18 +177,25 @@ function showCurrentWord() {
     // Update buttons
     for (let i = 1; i <= 4; i++) {
         const btn = document.getElementById(`option-${i}`);
-        btn.textContent = shuffledOptions[i - 1];
-        btn.style.background = '';
-        btn.style.backgroundColor = '';
-        btn.disabled = false;
+        if (btn) {
+            btn.textContent = shuffledOptions[i - 1];
+            btn.style.background = '';
+            btn.style.backgroundColor = '';
+            btn.disabled = false;
+        }
     }
     selectedForCurrent = false;
 
-    // If last word, change close button to "关闭"
-    if (currentReadIndex === currentReadWords.length - 1) {
-        document.getElementById('close-read-modal').textContent = '查看结果';
-    } else {
-        document.getElementById('close-read-modal').textContent = '关闭';
+    const closeBtn = document.getElementById('close-read-modal');
+    if (closeBtn) {
+        // If last word and not result shown, change close button to "查看结果"
+        if (currentReadIndex === currentReadWords.length - 1 && !resultShown) {
+            closeBtn.textContent = '查看结果';
+        } else if (resultShown) {
+            closeBtn.textContent = '关闭';
+        } else {
+            closeBtn.textContent = '关闭';
+        }
     }
 }
 
@@ -200,7 +212,8 @@ for (let i = 1; i <= 4; i++) {
         };
         // Reset all options background
         for (let j = 1; j <= 4; j++) {
-            document.getElementById(`option-${j}`).style.background = '';
+            const optBtn = document.getElementById(`option-${j}`);
+            if (optBtn) optBtn.style.background = '';
         }
         // Highlight selected option
         this.style.background = 'linear-gradient(to right, orange, red)';
@@ -224,28 +237,52 @@ document.getElementById('next-word').addEventListener('click', function() {
 });
 
 document.getElementById('close-read-modal').addEventListener('click', function() {
-    if (currentReadIndex === currentReadWords.length - 1) {
+    if (resultShown) {
+        // Close modal and reload
+        document.getElementById('read-vocab-modal').style.display = 'none';
+        document.getElementById('vocab-list').style.display = 'block';
+        // Show search and filter
+        document.querySelector('.search-filter-row').style.display = 'flex';
+        document.querySelector('.menu-container').style.display = 'block';
+        // Enable menu button
+        document.getElementById('menu-button').style.pointerEvents = 'auto';
+        document.getElementById('menu-button').style.opacity = '1';
+        location.reload(); // Reload page when closing modal
+    } else if (currentReadIndex === currentReadWords.length - 1) {
+        // Check if all answers are provided
+        if (userAnswers.length < currentReadWords.length) {
+            alert('请回答所有问题后再查看结果。');
+            return;
+        }
         // Check all answers
         const wrongAnswers = userAnswers.filter(a => !a.correct);
         let resultHTML = '';
         if (wrongAnswers.length === 0) {
-            resultHTML = '<p>Hoàn thành! Tất cả đúng.</p>';
+            resultHTML = '<p>完成！全部正确。</p>';
         } else {
-            resultHTML = '<p>Các từ sai:</p><ul>';
+            resultHTML = '<p>错误的词：</p><ul>';
             wrongAnswers.forEach(a => {
-                resultHTML += `<li>Từ: ${a.word} - Chọn: ${a.selectedMeaning}</li>`;
+                resultHTML += `<li>词: ${a.word} - 选择: ${a.selectedMeaning}</li>`;
             });
             resultHTML += '</ul>';
         }
         // Update modal content
-        document.getElementById('word-chinese').textContent = 'Kết quả:';
-        document.getElementById('read-vocab-content').innerHTML = resultHTML;
+        const wordChinese = document.getElementById('word-chinese');
+        if (wordChinese) wordChinese.textContent = '结果:';
+        const readContent = document.getElementById('read-vocab-content');
+        if (readContent) readContent.innerHTML = resultHTML;
         // Hide options
         document.querySelectorAll('.option-btn').forEach(btn => btn.style.display = 'none');
-        document.getElementById('prev-word').style.display = 'none';
-        document.getElementById('next-word').style.display = 'none';
+        const prevBtn = document.getElementById('prev-word');
+        if (prevBtn) prevBtn.style.display = 'none';
+        const nextBtn = document.getElementById('next-word');
+        if (nextBtn) nextBtn.style.display = 'none';
         // Change button to "关闭" for reload
-        document.getElementById('close-read-modal').textContent = '关闭';
+        const closeBtn = document.getElementById('close-read-modal');
+        if (closeBtn) {
+            closeBtn.textContent = '关闭';
+        }
+        resultShown = true;
     } else {
         document.getElementById('read-vocab-modal').style.display = 'none';
         document.getElementById('vocab-list').style.display = 'block';
