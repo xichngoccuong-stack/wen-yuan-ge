@@ -114,6 +114,8 @@ let currentReadIndex = 0;
 let userAnswers = [];
 let selectedForCurrent = false;
 let resultShown = false;
+let wordOptions = [];
+let correctIndexPerWord = [];
 
 document.getElementById('read-btn').addEventListener('click', async function() {
     const docRef = db.collection('quiz-settings').doc('settings');
@@ -142,6 +144,18 @@ document.getElementById('read-btn').addEventListener('click', async function() {
         return;
     }
     currentReadWords = filteredVocabs;
+    // Pre-generate options for each word
+    wordOptions = [];
+    correctIndexPerWord = [];
+    currentReadWords.forEach(word => {
+        const options = [word.meaning];
+        const otherVocabs = window.vocabularies.filter(v => v.meaning !== word.meaning);
+        const shuffledOthers = otherVocabs.sort(() => 0.5 - Math.random()).slice(0, 3);
+        options.push(...shuffledOthers.map(v => v.meaning));
+        const shuffledOptions = options.sort(() => 0.5 - Math.random());
+        wordOptions.push(shuffledOptions);
+        correctIndexPerWord.push(shuffledOptions.indexOf(word.meaning));
+    });
     currentReadIndex = 0;
     showCurrentWord();
     document.getElementById('read-vocab-modal').style.display = 'block';
@@ -165,15 +179,10 @@ function showCurrentWord() {
     const nextBtn = document.getElementById('next-word');
     if (nextBtn) nextBtn.disabled = currentReadIndex === currentReadWords.length - 1;
 
-    // Generate 4 options: 1 correct, 3 random from other vocabularies
-    const options = [word.meaning];
-    const otherVocabs = window.vocabularies.filter(v => v.meaning !== word.meaning);
-    const shuffledOthers = otherVocabs.sort(() => 0.5 - Math.random()).slice(0, 3);
-    options.push(...shuffledOthers.map(v => v.meaning));
-    // Shuffle options
-    const shuffledOptions = options.sort(() => 0.5 - Math.random());
+    // Use pre-generated options
+    const shuffledOptions = wordOptions[currentReadIndex];
     // Store correct answer index
-    window.correctIndex = shuffledOptions.indexOf(word.meaning);
+    window.correctIndex = correctIndexPerWord[currentReadIndex];
     // Update buttons
     for (let i = 1; i <= 4; i++) {
         const btn = document.getElementById(`option-${i}`);
@@ -184,7 +193,20 @@ function showCurrentWord() {
             btn.disabled = false;
         }
     }
-    selectedForCurrent = false;
+    // Check if already selected
+    if (userAnswers[currentReadIndex]) {
+        const selectedMeaning = userAnswers[currentReadIndex].selectedMeaning;
+        for (let i = 1; i <= 4; i++) {
+            const btn = document.getElementById(`option-${i}`);
+            if (btn && btn.textContent === selectedMeaning) {
+                btn.style.background = 'linear-gradient(to right, orange, red)';
+                selectedForCurrent = true;
+                break;
+            }
+        }
+    } else {
+        selectedForCurrent = false;
+    }
 
     const closeBtn = document.getElementById('close-read-modal');
     if (closeBtn) {
@@ -208,7 +230,8 @@ for (let i = 1; i <= 4; i++) {
         userAnswers[currentReadIndex] = {
             word: word.chinese,
             selectedMeaning: selectedMeaning,
-            correct: isCorrect
+            correct: isCorrect,
+            correctMeaning: word.meaning
         };
         // Reset all options background
         for (let j = 1; j <= 4; j++) {
@@ -262,7 +285,7 @@ document.getElementById('close-read-modal').addEventListener('click', function()
         } else {
             resultHTML = '<p>错误的词：</p><ul>';
             wrongAnswers.forEach(a => {
-                resultHTML += `<li>词: ${a.word} - 选择: ${a.selectedMeaning}</li>`;
+                resultHTML += `<li>${a.word}: <span style="font-family: 'Shalimar'; font-size: 24px;">${a.correctMeaning}</span> <span style="color: red; font-weight: bold; font-family: 'Shalimar'; font-size: 24px;">(${a.selectedMeaning})</span></li>`;
             });
             resultHTML += '</ul>';
         }
