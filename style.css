@@ -51,7 +51,7 @@ header {
     z-index: 100;
 }
 
-/* ===== CENTER TUYỆT ĐỐI ===== */
+/* ===== CENTER ===== */
 .logo-container {
     position: absolute;
     top: 50%;
@@ -116,11 +116,18 @@ h1 {
     font-size: 20px;
 }
 
-/* ===== SEARCH INPUT ===== */
-.search-input {
+/* ===== SEARCH FILTER ROW ===== */
+.search-filter-row {
     position: fixed;
     top: 130px;
     left: 55px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ===== SEARCH INPUT ===== */
+.search-input {
     width: 170px;
     height: 13px;
     padding: 5px;
@@ -128,12 +135,25 @@ h1 {
     border-radius: 5px;
     background: rgba(0,0,0,0.3);
     color: white;
-    font-family: 'Shalimar', cursive;
+    font-family: 'Ma Shan Zheng', sans-serif;
     font-size: 20px;
 }
 
 .search-input::placeholder {
     font-family: 'Ma Shan Zheng', sans-serif;
+}
+
+/* ===== CATEGORY FILTER ===== */
+.category-filter {
+    width: 170px;
+    height: 25px;
+    padding: 5px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 5px;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-family: 'Ma Shan Zheng', sans-serif;
+    font-size: 20px;
 }
 
 /* ===== VOCAB FORM ===== */

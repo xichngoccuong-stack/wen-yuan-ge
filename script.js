@@ -62,6 +62,7 @@ Promise.all([
                 document.getElementById('edit-meaning').value = data.meaning;
                 document.getElementById('edit-pinyin').value = data.pinyin;
                 document.getElementById('edit-hanviet').value = data.hanviet || '';
+                document.getElementById('edit-category').value = data.category || '生活';
                 // Show edit modal
                 document.getElementById('edit-vocab-form').style.display = 'block';
                 // Store docId for submit
@@ -76,11 +77,29 @@ Promise.all([
     // Search functionality
     document.getElementById('search-input').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
+        const category = document.getElementById('category-filter').value;
         const filtered = vocabularies.filter(vocab => {
-            return vocab.chinese.toLowerCase().includes(term) ||
-                   (vocab.hanviet && vocab.hanviet.toLowerCase().includes(term)) ||
-                   vocab.meaning.toLowerCase().includes(term) ||
-                   vocab.pinyin.toLowerCase().includes(term);
+            const matchesSearch = vocab.chinese.toLowerCase().includes(term) ||
+                    (vocab.hanviet && vocab.hanviet.toLowerCase().includes(term)) ||
+                    vocab.meaning.toLowerCase().includes(term) ||
+                    vocab.pinyin.toLowerCase().includes(term);
+            const matchesCategory = category === '' || vocab.category === category;
+            return matchesSearch && matchesCategory;
+        });
+        displayVocabularies(filtered);
+    });
+
+    // Category filter functionality
+    document.getElementById('category-filter').addEventListener('change', () => {
+        const term = document.getElementById('search-input').value.toLowerCase();
+        const category = document.getElementById('category-filter').value;
+        const filtered = vocabularies.filter(vocab => {
+            const matchesSearch = vocab.chinese.toLowerCase().includes(term) ||
+                    (vocab.hanviet && vocab.hanviet.toLowerCase().includes(term)) ||
+                    vocab.meaning.toLowerCase().includes(term) ||
+                    vocab.pinyin.toLowerCase().includes(term);
+            const matchesCategory = category === '' || vocab.category === category;
+            return matchesSearch && matchesCategory;
         });
         displayVocabularies(filtered);
     });
@@ -142,7 +161,8 @@ document.getElementById('edit-vocab-form-element').addEventListener('submit', as
             chinese: chinese,
             meaning: meaning,
             pinyin: pinyin,
-            hanviet: hanviet
+            hanviet: hanviet,
+            category: document.getElementById('edit-category').value
         };
         if (audioUrl) {
             updateData.audioUrl = audioUrl;
@@ -196,6 +216,7 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
             meaning: meaning,
             pinyin: pinyin,
             hanviet: hanviet,
+            category: document.getElementById('category').value,
             audioUrl: audioUrl,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });

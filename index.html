@@ -27,7 +27,15 @@
                 </ul>
             </div>
         </div>
-        <input type="text" id="search-input" placeholder="搜索。。。" class="search-input">
+        <div class="search-filter-row">
+            <input type="text" id="search-input" placeholder="搜索。。。" class="search-input">
+            <select id="category-filter" class="category-filter">
+                <option value="">全部</option>
+                <option value="生活">生活</option>
+                <option value="工作">工作</option>
+                <option value="学习">学习</option>
+            </select>
+        </div>
     </header>
     
         <!-- Vocabulary Form -->
@@ -42,7 +50,13 @@
                 <input type="text" id="pinyin" required>
                 <label for="hanviet">汉越音:</label>
                 <input type="text" id="hanviet">
-                <label for="audio">MP3 文件发音（可选）：</label>
+                <label for="category">类别:</label>
+                <select id="category">
+                    <option value="生活" selected>生活</option>
+                    <option value="工作">工作</option>
+                    <option value="学习">学习</option>
+                </select>
+                <label for="audio">音频:</label>
                 <input type="file" id="audio" accept="audio/mp3">
                 <div class="button-row">
                     <button type="submit">添加</button>
@@ -63,7 +77,13 @@
                 <input type="text" id="edit-pinyin" required>
                 <label for="edit-hanviet">汉越音:</label>
                 <input type="text" id="edit-hanviet">
-                <label for="edit-audio">MP3 文件发音（可选）：</label>
+                <label for="edit-category">类别:</label>
+                <select id="edit-category">
+                    <option value="生活" selected>生活</option>
+                    <option value="工作">工作</option>
+                    <option value="学习">学习</option>
+                </select>
+                <label for="edit-audio">音频:</label>
                 <input type="file" id="edit-audio" accept="audio/mp3">
                 <div class="button-row">
                     <button type="submit">更新</button>
@@ -73,7 +93,7 @@
         </div>
 
         <!-- Background -->
-    <img id="image" src="background.png" alt="Hình nền">
+    <img id="image" src="background.png" alt="背景图像">
     <video id="video" src="background.mp4" muted autoplay loop></video>
 
     <script src="script.js"></script>
