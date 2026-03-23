@@ -30,39 +30,59 @@ Promise.all([
 
     // Display vocabularies
     const list = document.getElementById('vocab-list');
-    list.innerHTML = '';
+    let vocabularies = [];
     querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const item = document.createElement('div');
-        item.setAttribute('data-doc-id', doc.id);
-        item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet && data.hanviet !== data.meaning ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
-        item.querySelector('.speaker-icon').addEventListener('click', () => {
-            if (data.audioUrl) {
-                const audio = new Audio(data.audioUrl);
-                audio.play();
-            } else {
-                if ('speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(data.chinese);
-                    utterance.lang = 'zh-CN';
-                    speechSynthesis.speak(utterance);
+        vocabularies.push({ id: doc.id, ...doc.data() });
+    });
+
+    function displayVocabularies(filteredVocabularies) {
+        list.innerHTML = '';
+        filteredVocabularies.forEach((data) => {
+            const item = document.createElement('div');
+            item.setAttribute('data-doc-id', data.id);
+            item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet && data.hanviet !== data.meaning ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
+            item.querySelector('.speaker-icon').addEventListener('click', () => {
+                if (data.audioUrl) {
+                    const audio = new Audio(data.audioUrl);
+                    audio.play();
                 } else {
-                    alert('Web Speech API 在此浏览器中不受支持。');
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(data.chinese);
+                        utterance.lang = 'zh-CN';
+                        speechSynthesis.speak(utterance);
+                    } else {
+                        alert('Web Speech API 在此浏览器中不受支持。');
+                    }
                 }
-            }
+            });
+            item.querySelector('.edit-icon').addEventListener('click', () => {
+                const docId = item.getAttribute('data-doc-id');
+                // Populate edit form with data
+                document.getElementById('edit-chinese').value = data.chinese;
+                document.getElementById('edit-meaning').value = data.meaning;
+                document.getElementById('edit-pinyin').value = data.pinyin;
+                document.getElementById('edit-hanviet').value = data.hanviet || '';
+                // Show edit modal
+                document.getElementById('edit-vocab-form').style.display = 'block';
+                // Store docId for submit
+                document.getElementById('edit-vocab-form-element').setAttribute('data-doc-id', docId);
+            });
+            list.appendChild(item);
         });
-        item.querySelector('.edit-icon').addEventListener('click', () => {
-            const docId = item.getAttribute('data-doc-id');
-            // Populate edit form with data
-            document.getElementById('edit-chinese').value = data.chinese;
-            document.getElementById('edit-meaning').value = data.meaning;
-            document.getElementById('edit-pinyin').value = data.pinyin;
-            document.getElementById('edit-hanviet').value = data.hanviet || '';
-            // Show edit modal
-            document.getElementById('edit-vocab-form').style.display = 'block';
-            // Store docId for submit
-            document.getElementById('edit-vocab-form-element').setAttribute('data-doc-id', docId);
+    }
+
+    displayVocabularies(vocabularies);
+
+    // Search functionality
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = vocabularies.filter(vocab => {
+            return vocab.chinese.toLowerCase().includes(term) ||
+                   (vocab.hanviet && vocab.hanviet.toLowerCase().includes(term)) ||
+                   vocab.meaning.toLowerCase().includes(term) ||
+                   vocab.pinyin.toLowerCase().includes(term);
         });
-        list.appendChild(item);
+        displayVocabularies(filtered);
     });
 }).catch((error) => {
     console.error('添加词汇时出错:', error);

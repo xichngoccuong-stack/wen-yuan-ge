@@ -124,6 +124,20 @@ h1 {
     font-size: 20px;
 }
 
+/* ===== SEARCH INPUT ===== */
+.search-input {
+    position: fixed;
+    top: 120px;
+    left: 50px;
+    padding: 5px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 5px;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-family: 'Shalimar', cursive;
+    font-size: 16px;
+}
+
 /* ===== VOCAB FORM ===== */
 .vocab-form {
     display: none;
