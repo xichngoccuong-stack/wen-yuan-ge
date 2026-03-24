@@ -78,15 +78,17 @@ window.addEventListener('load', async () => {
             button.style.background = 'transparent';
             button.style.color = 'white';
             button.addEventListener('click', () => {
+                // Reset all buttons to default
+                itemDiv.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'white';
+                    btn.disabled = false;
+                });
                 // Highlight selected
                 button.style.background = 'linear-gradient(45deg, green, black)';
                 button.style.color = 'white';
                 itemDiv.selectedOption = option;
                 itemDiv.selectedButton = button;
-                // Disable other buttons in this item
-                itemDiv.querySelectorAll('.option-btn').forEach(btn => {
-                    if (btn !== button) btn.disabled = true;
-                });
             });
             itemDiv.appendChild(button);
         });
@@ -116,14 +118,23 @@ resultBtn.addEventListener('click', () => {
         if (selected !== correct) {
             allCorrect = false;
             // Highlight wrong
-            if (item.selectedButton) item.selectedButton.style.background = 'red';
+            if (item.selectedButton) {
+                item.selectedButton.style.background = 'linear-gradient(45deg, red, black)';
+                item.selectedButton.style.color = 'white';
+            }
             // Highlight correct
             const correctBtn = Array.from(item.querySelectorAll('.option-btn')).find(btn => btn.textContent === correct);
-            if (correctBtn) correctBtn.style.background = 'green';
+            if (correctBtn) {
+                correctBtn.style.background = 'linear-gradient(45deg, green, black)';
+                correctBtn.style.color = 'white';
+            }
             // Show modal
             showModal(`Wrong for "${item.vocab.chinese}". Correct is: ${correct}`);
         } else {
-            if (item.selectedButton) item.selectedButton.style.background = 'green';
+            if (item.selectedButton) {
+                item.selectedButton.style.background = 'linear-gradient(45deg, green, black)';
+                item.selectedButton.style.color = 'white';
+            }
         }
     });
     if (allCorrect) {
