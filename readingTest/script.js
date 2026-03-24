@@ -95,7 +95,16 @@ window.addEventListener('load', async () => {
 const resultBtn = document.createElement('button');
 resultBtn.textContent = '查看结果';
 resultBtn.style.fontSize = '20px';
-resultBtn.style.marginTop = '20px';
+resultBtn.style.fontFamily = "'Ma Shan Zheng', sans-serif";
+resultBtn.style.color = 'white';
+resultBtn.style.background = 'linear-gradient(45deg, red, black)';
+resultBtn.style.border = 'none';
+resultBtn.style.padding = '10px 20px';
+resultBtn.style.position = 'fixed';
+resultBtn.style.bottom = '5px';
+resultBtn.style.left = '50%';
+resultBtn.style.transform = 'translateX(-50%)';
+resultBtn.style.zIndex = '1000';
 resultBtn.addEventListener('click', () => {
     let allCorrect = true;
     const allItems = document.querySelectorAll('.quiz-question');
@@ -119,7 +128,7 @@ resultBtn.addEventListener('click', () => {
         showModal('All correct!');
     }
 });
-document.getElementById('reading-test').appendChild(resultBtn);
+document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
 
 // Hide loading spinner
 document.getElementById('loading-spinner').style.display = 'none';
