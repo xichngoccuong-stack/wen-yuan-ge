@@ -47,7 +47,7 @@ window.addEventListener('load', async () => {
         itemDiv.vocab = vocab;
         itemDiv.style.padding = '10px';
         itemDiv.style.background = 'rgba(0,0,0,0.3)';
-        itemDiv.style.border = '1px solid rgba(255,255,255,0.2)';
+        itemDiv.style.border = '1px solid white';
         itemDiv.style.borderRadius = '5px';
         itemDiv.style.textAlign = 'left';
         itemDiv.style.wordWrap = 'break-word';
@@ -77,6 +77,8 @@ window.addEventListener('load', async () => {
             button.style.margin = '2%';
             button.style.background = 'transparent';
             button.style.color = 'white';
+            button.style.border = '1px solid white';
+            button.style.borderRadius = '5px';
             button.addEventListener('click', () => {
                 // Reset all buttons to default
                 itemDiv.querySelectorAll('.option-btn').forEach(btn => {
@@ -128,17 +130,17 @@ resultBtn.addEventListener('click', () => {
                 correctBtn.style.background = 'linear-gradient(45deg, green, black)';
                 correctBtn.style.color = 'white';
             }
-            // Show modal
-            showModal(`Wrong for "${item.vocab.chinese}". Correct is: ${correct}`);
+            // Keep wrong item visible
+            item.style.display = 'block';
         } else {
-            if (item.selectedButton) {
-                item.selectedButton.style.background = 'linear-gradient(45deg, green, black)';
-                item.selectedButton.style.color = 'white';
-            }
+            // Hide correct item
+            item.style.display = 'none';
         }
     });
     if (allCorrect) {
-        showModal('All correct!');
+        showModal('全部答案都正确！');
+    } else {
+        showModal('仍有答案不正确，请再查看。');
     }
 });
 document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
