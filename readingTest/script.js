@@ -79,7 +79,8 @@ window.addEventListener('load', async () => {
             button.style.color = 'white';
             button.addEventListener('click', () => {
                 // Highlight selected
-                button.style.background = 'lightblue';
+                button.style.background = 'linear-gradient(45deg, green, black)';
+                button.style.color = 'white';
                 itemDiv.selectedOption = option;
                 itemDiv.selectedButton = button;
                 // Disable other buttons in this item
