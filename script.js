@@ -434,7 +434,7 @@ function showListenResults() {
     } else {
         resultHTML = '<p>错误的词：</p><ul>';
         wrongAnswers.forEach(a => {
-            resultHTML += `<li>正确: ${a.word} (${a.pinyin}) <audio controls src="${a.audioUrl}"></audio><br>您的输入: <span style="color: red;">${a.userInput}</span></li>`;
+            resultHTML += `<li>正确: ${a.word} | <span style="font-family: 'Shalimar'; font-size: 26px;">${a.pinyin}</span> | <span class="play-icon" onclick="playAudio('${a.audioUrl}')">🔊</span><br>您的输入: <span style="color: red;">${a.userInput}</span></li>`;
         });
         resultHTML += '</ul>';
     }
@@ -447,6 +447,11 @@ function showListenResults() {
     // Change close button
     document.getElementById('close-listen-modal').textContent = '关闭';
     listenResultShown = true;
+}
+
+function playAudio(url) {
+    const audio = new Audio(url);
+    audio.play();
 }
 
 document.getElementById('close-listen-modal').addEventListener('click', function() {
@@ -496,7 +501,7 @@ document.getElementById('close-listen-modal').addEventListener('click', function
         } else {
             resultHTML = '<p>错误的词：</p><ul>';
             wrongAnswers.forEach(a => {
-                resultHTML += `<li>正确: ${a.word} (${a.pinyin}) <audio controls src="${a.audioUrl}"></audio><br>您的输入: <span style="color: red;">${a.userInput}</span></li>`;
+                resultHTML += `<li>正确: ${a.word} | <span style="font-family: 'Shalimar'; font-size: 26px;">${a.pinyin}</span> | <span class="play-icon" onclick="playAudio('${a.audioUrl}')">🔊</span><br>您的输入: <span style="color: red;">${a.userInput}</span></li>`;
             });
             resultHTML += '</ul>';
         }
