@@ -44,6 +44,7 @@ window.addEventListener('load', async () => {
     selectedVocabs.forEach((vocab, index) => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'quiz-question';
+        itemDiv.vocab = vocab;
         itemDiv.style.padding = '10px';
         itemDiv.style.background = 'rgba(0,0,0,0.3)';
         itemDiv.style.border = '1px solid rgba(255,255,255,0.2)';
@@ -77,20 +78,57 @@ window.addEventListener('load', async () => {
             button.style.background = 'transparent';
             button.style.color = 'white';
             button.addEventListener('click', () => {
-                if (option === vocab.meaning) {
-                    button.style.background = 'green';
-                    alert('Correct!');
-                } else {
-                    button.style.background = 'red';
-                    alert('Wrong!');
-                }
-                // Disable all buttons
-                itemDiv.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+                // Highlight selected
+                button.style.background = 'lightblue';
+                itemDiv.selectedOption = option;
+                itemDiv.selectedButton = button;
+                // Disable other buttons in this item
+                itemDiv.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn !== button) btn.disabled = true;
+                });
             });
             itemDiv.appendChild(button);
         });
     });
 });
 
+const resultBtn = document.createElement('button');
+resultBtn.textContent = '查看结果';
+resultBtn.style.fontSize = '20px';
+resultBtn.style.marginTop = '20px';
+resultBtn.addEventListener('click', () => {
+    let allCorrect = true;
+    const allItems = document.querySelectorAll('.quiz-question');
+    allItems.forEach(item => {
+        const selected = item.selectedOption;
+        const correct = item.vocab.meaning;
+        if (selected !== correct) {
+            allCorrect = false;
+            // Highlight wrong
+            if (item.selectedButton) item.selectedButton.style.background = 'red';
+            // Highlight correct
+            const correctBtn = Array.from(item.querySelectorAll('.option-btn')).find(btn => btn.textContent === correct);
+            if (correctBtn) correctBtn.style.background = 'green';
+            // Show modal
+            showModal(`Wrong for "${item.vocab.chinese}". Correct is: ${correct}`);
+        } else {
+            if (item.selectedButton) item.selectedButton.style.background = 'green';
+        }
+    });
+    if (allCorrect) {
+        showModal('All correct!');
+    }
+});
+document.getElementById('reading-test').appendChild(resultBtn);
+
 // Hide loading spinner
 document.getElementById('loading-spinner').style.display = 'none';
+
+function showModal(text) {
+    document.getElementById('modal-text').textContent = text;
+    document.getElementById('result-modal').style.display = 'block';
+}
+
+document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('result-modal').style.display = 'none';
+});
