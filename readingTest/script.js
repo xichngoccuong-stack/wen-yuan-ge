@@ -139,6 +139,10 @@ resultBtn.addEventListener('click', () => {
     });
     if (allCorrect) {
         showModal('全部答案都正确！');
+        setTimeout(() => {
+            document.getElementById('result-modal').style.display = 'none';
+            document.getElementById('confirm-modal').style.display = 'block';
+        }, 1000);
     } else {
         showModal('仍有答案不正确，请再查看。');
     }
@@ -155,4 +159,12 @@ function showModal(text) {
 
 document.getElementById('close-modal').addEventListener('click', () => {
     document.getElementById('result-modal').style.display = 'none';
+});
+
+document.getElementById('continue-btn').addEventListener('click', () => {
+    location.reload();
+});
+
+document.getElementById('home-btn').addEventListener('click', () => {
+    window.location.href = '../index.html';
 });
