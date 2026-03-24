@@ -12,16 +12,9 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 window.addEventListener('load', async () => {
-    const quizContainer = document.getElementById('quiz-container');
-
     // Load quiz settings
     const settingsDoc = await db.collection('quiz-settings').doc('settings').get();
-    if (!settingsDoc.exists) {
-        quizContainer.innerHTML = '<p>No quiz settings found.</p>';
-        return;
-    }
-    const settings = settingsDoc.data();
-    const numWords = parseInt(settings.numWords) || 10;
+    const settings = settingsDoc.data() || {};
     const category = settings.category || '全部';
 
     // Load vocabularies
@@ -31,11 +24,17 @@ window.addEventListener('load', async () => {
     }
     const vocabSnapshot = await query.get();
     const vocabularies = vocabSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    console.log('Vocabularies count:', vocabularies.length);
+    console.log('Category:', category);
 
-    if (vocabularies.length < numWords) {
-        quizContainer.innerHTML = '<p>Not enough vocabularies for the quiz.</p>';
-        return;
+    // Determine numWords
+    let numWords;
+    if (settings.numWords && !isNaN(parseInt(settings.numWords))) {
+        numWords = Math.min(parseInt(settings.numWords), vocabularies.length);
+    } else {
+        numWords = vocabularies.length;
     }
+    console.log('NumWords:', numWords);
 
     // Random select numWords
     const shuffled = vocabularies.sort(() => 0.5 - Math.random());
@@ -92,3 +91,6 @@ window.addEventListener('load', async () => {
         });
     });
 });
+
+// Hide loading spinner
+document.getElementById('loading-spinner').style.display = 'none';
