@@ -327,3 +327,8 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
         alert('添加词汇时发生错误。');
     }
 });
+
+// Add event listener for read-btn to navigate to reading test page
+document.getElementById('read-btn').addEventListener('click', function() {
+    window.location.href = 'readingTest/index.html';
+});

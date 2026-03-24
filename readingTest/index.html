@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文渊阁 - Văn Uyên Các - Reading Test</title>
+    <link rel="icon" href="../logo.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Shalimar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { margin: 0; padding: 0; }
+        header { display: block !important; margin: 0; padding: 0; }
+        .logo-container { padding: 0; }
+        header h1 { margin: 0; }
+        #reading-test { margin-top: 0; }
+        .quiz-question:first-child { margin-top: 0; }
+        #video { display: block !important; }
+        .title-container {
+            position: absolute;
+            top: 100px;
+            left: 50px;
+            color: white;
+            font-family: 'Ma Shan Zheng', sans-serif;
+            font-size: 20px;
+            z-index: 10;
+        }
+        .title-container h2 {
+            font-weight: normal !important;
+        }
+        h3 {
+            font-weight: normal !important;
+        }
+        .quiz-question {
+            margin: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+            text-align: left;
+            word-wrap: break-word;
+            flex: 1 1 300px;
+            max-width: 400px;
+        }
+        .vocab-list {
+            display: flex !important;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 10px;
+            width: calc(100vw - 100px);
+        }
+        #quiz-container {
+            /* Removed flex to avoid conflicts */
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    </head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="../logo.ico" alt="Logo">
+            <h1>Vaên Uyeân Caùc</h1>
+        </div>
+    </header>
+
+    <div class="title-container">
+        <h2>选择下列词语的正确含义:</h2>
+    </div>
+
+    <!-- Nội dung cho reading test -->
+    <div id="reading-test" class="vocab-list">
+    </div>
+
+<!-- Background -->
+<video id="video" src="../background.mp4" muted autoplay loop></video>
+
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
