@@ -158,6 +158,30 @@
             </div>
         </div>
 
+        <!-- Listen Vocab Modal -->
+        <div id="listen-vocab-modal" class="vocab-form" style="display: none;">
+            <h2>检查词汇(听)</h2>
+            <div id="listen-vocab-content">
+                <div id="listen-word">
+                    <div class="audio-display">
+                        <p>点击播放音频:</p>
+                        <audio id="word-audio" controls></audio>
+                    </div>
+                    <div class="input-section" style="margin-top: 20px;">
+                        <p>请输入中文词语:</p>
+                        <input type="text" id="user-chinese-input" placeholder="输入中文...">
+                    </div>
+                </div>
+                <div class="button-row" style="margin-top: 20px;">
+                    <button type="button" id="prev-listen-word" disabled>上一词</button>
+                    <button type="button" id="next-listen-word">下一词</button>
+                </div>
+            </div>
+            <div class="button-row" style="margin-top: 20px; justify-content: center;">
+                <button type="button" id="close-listen-modal">关闭</button>
+            </div>
+        </div>
+
         <!-- Background -->
     <img id="image" src="background.png" alt="背景图像">
     <video id="video" src="background.mp4" muted autoplay loop></video>

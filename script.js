@@ -117,6 +117,12 @@ let resultShown = false;
 let wordOptions = [];
 let correctIndexPerWord = [];
 
+// Listen modal functionality
+let currentListenWords = [];
+let currentListenIndex = 0;
+let listenUserAnswers = [];
+let listenResultShown = false;
+
 document.getElementById('read-btn').addEventListener('click', async function() {
     const docRef = db.collection('quiz-settings').doc('settings');
     const doc = await docRef.get();
@@ -318,6 +324,202 @@ document.getElementById('close-read-modal').addEventListener('click', function()
         document.getElementById('menu-button').style.opacity = '1';
         document.getElementById('spinner').style.display = 'block';
         location.reload(); // Reload page when closing modal
+    }
+});
+
+// Listen modal functionality
+document.getElementById('listen-btn').addEventListener('click', async function() {
+    const docRef = db.collection('quiz-settings').doc('settings');
+    const doc = await docRef.get();
+    let numWords = 1; // default to 1 for listen
+    let category = '';
+    if (doc.exists) {
+        const data = doc.data();
+        numWords = data.numWords ? parseInt(data.numWords) : 1;
+        category = data.category || '';
+    }
+    let filteredVocabs = window.vocabularies;
+    if (category && category !== '全部') {
+        filteredVocabs = window.vocabularies.filter(v => v.category === category);
+    }
+    // Randomize
+    if (filteredVocabs.length > 1) {
+        const shuffled = [...filteredVocabs].sort(() => 0.5 - Math.random());
+        filteredVocabs = shuffled;
+    }
+    if (numWords && numWords < filteredVocabs.length) {
+        filteredVocabs = filteredVocabs.slice(0, numWords);
+    }
+    if (filteredVocabs.length === 0) {
+        alert('No vocabularies found for the selected category.');
+        return;
+    }
+    currentListenWords = filteredVocabs;
+    currentListenIndex = 0;
+    listenUserAnswers = [];
+    showCurrentListenWord();
+    document.getElementById('listen-vocab-modal').style.display = 'block';
+    document.getElementById('check-vocab-modal').style.display = 'none';
+    document.getElementById('vocab-list').style.display = 'none';
+    // Hide search and filter
+    document.querySelector('.search-filter-row').style.display = 'none';
+    document.querySelector('.menu-container').style.display = 'none';
+    // Disable menu button
+    document.getElementById('menu-button').style.pointerEvents = 'none';
+    document.getElementById('menu-button').style.opacity = '0.5';
+    listenResultShown = false;
+});
+
+function showCurrentListenWord() {
+    const word = currentListenWords[currentListenIndex];
+    const audio = document.getElementById('word-audio');
+    if (audio) {
+        audio.src = word.audioUrl || '';
+        audio.load();
+    }
+    // Populate input if already answered
+    const input = document.getElementById('user-chinese-input');
+    if (listenUserAnswers[currentListenIndex]) {
+        input.value = listenUserAnswers[currentListenIndex].userInput;
+    } else {
+        input.value = '';
+    }
+    // Update button states
+    const prevBtn = document.getElementById('prev-listen-word');
+    if (prevBtn) prevBtn.disabled = currentListenIndex === 0;
+    const nextBtn = document.getElementById('next-listen-word');
+    if (nextBtn) nextBtn.disabled = currentListenIndex === currentListenWords.length - 1;
+    // Update close button
+    const closeBtn = document.getElementById('close-listen-modal');
+    if (closeBtn) {
+        if (currentListenIndex === currentListenWords.length - 1 && !listenResultShown) {
+            closeBtn.textContent = '查看结果';
+        } else {
+            closeBtn.textContent = '关闭';
+        }
+    }
+}
+
+document.getElementById('next-listen-word').addEventListener('click', function() {
+    const userInput = document.getElementById('user-chinese-input').value.trim();
+    const word = currentListenWords[currentListenIndex];
+    const isCorrect = userInput === word.chinese;
+    listenUserAnswers[currentListenIndex] = {
+        word: word.chinese,
+        userInput: userInput,
+        correct: isCorrect,
+        pinyin: word.pinyin,
+        audioUrl: word.audioUrl
+    };
+    if (currentListenIndex < currentListenWords.length - 1) {
+        currentListenIndex++;
+        showCurrentListenWord();
+    } else {
+        showListenResults();
+    }
+});
+
+document.getElementById('prev-listen-word').addEventListener('click', function() {
+    if (currentListenIndex > 0) {
+        currentListenIndex--;
+        showCurrentListenWord();
+    }
+});
+
+function showListenResults() {
+    let resultHTML = '';
+    const wrongAnswers = listenUserAnswers.filter(a => !a.correct);
+    if (wrongAnswers.length === 0) {
+        resultHTML = '<p style="text-align: center;">完成！全部正确。</p>';
+    } else {
+        resultHTML = '<p>错误的词：</p><ul>';
+        wrongAnswers.forEach(a => {
+            resultHTML += `<li>正确: ${a.word} (${a.pinyin}) <audio controls src="${a.audioUrl}"></audio><br>您的输入: <span style="color: red;">${a.userInput}</span></li>`;
+        });
+        resultHTML += '</ul>';
+    }
+    // Update modal content
+    document.getElementById('listen-vocab-content').innerHTML = resultHTML;
+    // Hide input
+    document.querySelector('.input-section').style.display = 'none';
+    document.getElementById('prev-listen-word').style.display = 'none';
+    document.getElementById('next-listen-word').style.display = 'none';
+    // Change close button
+    document.getElementById('close-listen-modal').textContent = '关闭';
+    listenResultShown = true;
+}
+
+document.getElementById('close-listen-modal').addEventListener('click', function() {
+    if (listenResultShown) {
+        // Close and reload
+        document.getElementById('listen-vocab-modal').style.display = 'none';
+        document.getElementById('vocab-list').style.display = 'block';
+        // Show search and filter
+        document.querySelector('.search-filter-row').style.display = 'flex';
+        document.querySelector('.menu-container').style.display = 'block';
+        // Enable menu button
+        document.getElementById('menu-button').style.pointerEvents = 'auto';
+        document.getElementById('menu-button').style.opacity = '1';
+        document.getElementById('spinner').style.display = 'block';
+        location.reload();
+    } else if (currentListenIndex === currentListenWords.length - 1) {
+        // Save current answer if not saved
+        if (!listenUserAnswers[currentListenIndex]) {
+            const userInput = document.getElementById('user-chinese-input').value.trim();
+            const word = currentListenWords[currentListenIndex];
+            const isCorrect = userInput === word.chinese;
+            listenUserAnswers[currentListenIndex] = {
+                word: word.chinese,
+                userInput: userInput,
+                correct: isCorrect,
+                pinyin: word.pinyin,
+                audioUrl: word.audioUrl
+            };
+        }
+        // Check if all answers are provided
+        let allAnswered = true;
+        for (let i = 0; i < currentListenWords.length; i++) {
+            if (!listenUserAnswers[i]) {
+                allAnswered = false;
+                break;
+            }
+        }
+        if (!allAnswered) {
+            alert('请回答所有问题后再查看结果。');
+            return;
+        }
+        // Check all answers
+        const wrongAnswers = listenUserAnswers.filter(a => !a.correct);
+        let resultHTML = '';
+        if (wrongAnswers.length === 0) {
+            resultHTML = '<p style="text-align: center;">完成！全部正确。</p>';
+        } else {
+            resultHTML = '<p>错误的词：</p><ul>';
+            wrongAnswers.forEach(a => {
+                resultHTML += `<li>正确: ${a.word} (${a.pinyin}) <audio controls src="${a.audioUrl}"></audio><br>您的输入: <span style="color: red;">${a.userInput}</span></li>`;
+            });
+            resultHTML += '</ul>';
+        }
+        // Update modal content
+        document.getElementById('listen-vocab-content').innerHTML = resultHTML;
+        // Hide input
+        document.querySelector('.input-section').style.display = 'none';
+        document.getElementById('prev-listen-word').style.display = 'none';
+        document.getElementById('next-listen-word').style.display = 'none';
+        // Change close button
+        document.getElementById('close-listen-modal').textContent = '关闭';
+        listenResultShown = true;
+    } else {
+        document.getElementById('listen-vocab-modal').style.display = 'none';
+        document.getElementById('vocab-list').style.display = 'block';
+        // Show search and filter
+        document.querySelector('.search-filter-row').style.display = 'flex';
+        document.querySelector('.menu-container').style.display = 'block';
+        // Enable menu button
+        document.getElementById('menu-button').style.pointerEvents = 'auto';
+        document.getElementById('menu-button').style.opacity = '1';
+        document.getElementById('spinner').style.display = 'block';
+        location.reload();
     }
 });
 
