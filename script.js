@@ -23,11 +23,11 @@ Promise.all([
     new Promise(resolve => setTimeout(resolve, 2000)),
     document.fonts.ready,
     db.collection('vocabularies').orderBy('hanviet').get()
-]).then(([timeout, fonts, querySnapshot]) => {
+]).then(([_timeout, _fonts, querySnapshot]) => {
     document.getElementById('image').style.display = 'none';
     document.getElementById('video').style.display = 'block';
     document.querySelector('header').style.display = 'block';
-
+    
     // Display vocabularies
     const list = document.getElementById('vocab-list');
     let vocabularies = [];
@@ -79,8 +79,7 @@ Promise.all([
     }
 
     displayVocabularies(vocabularies);
-    window.vocabularies = vocabularies; // Make vocabularies global for read modal
-
+    
     // Search functionality
     document.getElementById('search-input').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
@@ -113,33 +112,6 @@ Promise.all([
 }).catch((error) => {
     console.error('添加词汇时出错:', error);
 });
-
-// Read modal functionality
-let currentReadWords = [];
-let currentReadIndex = 0;
-let userAnswers = [];
-let selectedForCurrent = false;
-let resultShown = false;
-let wordOptions = [];
-let correctIndexPerWord = [];
-
-// Listen modal functionality
-let currentListenWords = [];
-let currentListenIndex = 0;
-let listenUserAnswers = [];
-let listenResultShown = false;
-
-// Event listener for read-btn removed
-
-
-
-
-
-
-
-
-
-
 
 // Menu toggle
 document.getElementById('menu-button').addEventListener('click', function() {
