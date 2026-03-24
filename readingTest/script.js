@@ -94,6 +94,7 @@ window.addEventListener('load', async () => {
 
 const resultBtn = document.createElement('button');
 resultBtn.textContent = '查看结果';
+resultBtn.className = 'result-btn';
 resultBtn.style.fontSize = '20px';
 resultBtn.style.fontFamily = "'Ma Shan Zheng', sans-serif";
 resultBtn.style.color = 'white';
