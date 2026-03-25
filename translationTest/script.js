@@ -59,7 +59,7 @@ item.className = 'quiz-question';
 item.innerHTML = `
     <label style="display: block; text-align: center; font-family: 'Shalimar', sans-serif; font-size: 28px;">${vocab.meaning}</label>
     <div style="text-align: center;">
-        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px; width: auto; min-width: 150px; max-width: 400px; display: block; margin: 0 auto;" data-correct="${vocab.chinese}">
+        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px; width: auto; min-width: 150px; max-width: 400px; display: block; margin: 0 auto; text-align: center;" data-correct="${vocab.chinese}">
     </div>
 `;
 item.setAttribute('data-pinyin', vocab.pinyin);
