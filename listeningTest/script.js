@@ -77,18 +77,26 @@ item.className = 'quiz-question';
 const questionNumber = convertNumberToChineseSimple(index + 1);
 item.innerHTML = `
     <label style="display: block; text-align: center;">第${questionNumber}题</label>
-    <button class="play-btn" data-audio="${vocab.audioUrl || ''}" data-chinese="${vocab.chinese}">🔊</button>
-    <input type="text" class="chinese-input" placeholder="Nhập chữ Hán" data-correct="${vocab.chinese}">
+    <div style="text-align: center;">
+        <button class="play-btn" style="margin-top: -10px;" data-audio="${vocab.audioUrl || ''}" data-chinese="${vocab.chinese}">🔊</button>
+        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px;" data-correct="${vocab.chinese}">
+    </div>
 `;
+item.setAttribute('data-pinyin', vocab.pinyin);
 container.appendChild(item);
 });
 
 // Add submit button
 const submitBtn = document.createElement('button');
-submitBtn.textContent = 'Xem kết quả';
+submitBtn.textContent = '查看结果';
 submitBtn.id = 'submit-btn';
 submitBtn.className = 'result-btn';
-container.appendChild(submitBtn);
+submitBtn.style.fontFamily = 'Ma Shan Zheng, sans-serif';
+submitBtn.style.position = 'fixed';
+submitBtn.style.bottom = '20px';
+submitBtn.style.left = '50%';
+submitBtn.style.transform = 'translateX(-50%)';
+document.body.appendChild(submitBtn);
 
     // Add event listeners
     document.querySelectorAll('.play-btn').forEach(btn => {
@@ -116,13 +124,16 @@ function checkResults() {
     inputs.forEach(input => {
         const correct = input.getAttribute('data-correct');
         const userInput = input.value.trim();
+        const item = input.closest('.quiz-question');
+        const label = item.querySelector('label');
+        const pinyin = item.getAttribute('data-pinyin');
         if (userInput === correct) {
             input.style.borderColor = 'green';
         } else {
             input.style.borderColor = 'red';
-            // Show correct answer
-            input.value = correct;
             input.style.backgroundColor = '#ffdddd';
+            // Update label to show Chinese and pinyin
+            label.innerHTML = correct + ' | <span style="font-family: \'Shalimar\', sans-serif; font-size: 28px;">' + pinyin + '</span>' + ' |';
         }
     });
 }
