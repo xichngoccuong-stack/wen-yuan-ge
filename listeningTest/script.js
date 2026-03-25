@@ -76,7 +76,7 @@ const item = document.createElement('div');
 item.className = 'quiz-question';
 const questionNumber = convertNumberToChineseSimple(index + 1);
 item.innerHTML = `
-    <div>第${questionNumber}题:</div>
+    <label style="display: block; text-align: center;">第${questionNumber}题</label>
     <button class="play-btn" data-audio="${vocab.audioUrl || ''}" data-chinese="${vocab.chinese}">🔊</button>
     <input type="text" class="chinese-input" placeholder="Nhập chữ Hán" data-correct="${vocab.chinese}">
 `;
