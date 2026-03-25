@@ -91,12 +91,15 @@ if (document.getElementById('category-filter')) document.getElementById('categor
 // Listen all button
 if (document.getElementById('listen-all-btn')) document.getElementById('listen-all-btn').addEventListener('click', () => {
     const button = document.getElementById('listen-all-btn');
+    const message = document.getElementById('playing-message');
     button.classList.add('dimmed');
+    message.style.display = 'block';
     const filtered = currentCategory === "all" ? phrases : phrases.filter(doc => doc.data().category === currentCategory);
     let index = 0;
     const playNext = () => {
         if (index >= filtered.length) {
             button.classList.remove('dimmed');
+            message.style.display = 'none';
             return;
         }
         const data = filtered[index].data();
