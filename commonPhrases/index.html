@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文渊阁 - Văn Uyên Các</title>
+    <link rel="icon" href="../logo.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Shalimar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        #video {
+            display: block;
+        }
+        header {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="../logo.ico" alt="Logo">
+            <h1>Vaên Uyeân Caùc</h1>
+        </div>
+
+        <div class="menu-container">
+            <button id="menu-button" style="background: transparent; border: none; color: white; font-size: 30px; cursor: pointer;">☰</button>
+            <div id="menu-dropdown" class="menu-dropdown">
+                <ul>
+                    <li><a href="#" id="add-vocab-link">✦ 生词</a></li>
+                    <li><a href="#" id="setup-quiz-link">✦ 设置检查</a></li>
+                    <li><a href="#" id="check-vocab-link">✦ 检查词汇</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search-filter-row">
+            <input type="text" id="search-input" placeholder="搜索。。。" class="search-input">
+            <select id="category-filter" class="category-filter">
+                <option value="">全部</option>
+                <option value="生活">生活</option>
+                <option value="工作">工作</option>
+                <option value="学习">学习</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Background -->
+    <video id="video" src="../background.mp4" muted autoplay loop></video>
+
+</body>
+</html>
