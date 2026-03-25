@@ -294,6 +294,14 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
     document.getElementById('spinner').style.display = 'block';
 
     try {
+        // Check if chinese already exists
+        const existingVocab = await db.collection('vocabularies').where('chinese', '==', chinese).get();
+        if (!existingVocab.empty) {
+            alert('该中文词语已存在！');
+            document.getElementById('spinner').style.display = 'none';
+            return;
+        }
+
         let audioUrl = null;
         if (audioFile) {
             const formData = new FormData();

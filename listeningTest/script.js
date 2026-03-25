@@ -79,7 +79,7 @@ item.innerHTML = `
     <label style="display: block; text-align: center;">第${questionNumber}题</label>
     <div style="text-align: center;">
         <button class="play-btn" style="margin-top: -10px;" data-audio="${vocab.audioUrl || ''}" data-chinese="${vocab.chinese}">🔊</button>
-        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px;" data-correct="${vocab.chinese}">
+        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px; text-align: center;" data-correct="${vocab.chinese}">
     </div>
 `;
 item.setAttribute('data-pinyin', vocab.pinyin);
