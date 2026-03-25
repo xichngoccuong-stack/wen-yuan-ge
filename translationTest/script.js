@@ -83,6 +83,35 @@ document.getElementById('submit-btn').addEventListener('click', checkResults);
 }
 
 function checkResults() {
+    // Check if all inputs are filled
+    const allInputs = document.querySelectorAll('.chinese-input');
+    let hasEmpty = false;
+    allInputs.forEach(input => {
+        if (input.value.trim() === '') {
+            hasEmpty = true;
+        }
+    });
+    if (hasEmpty) {
+        const notification = document.createElement('div');
+        notification.textContent = '请先填写所有答案。';
+        notification.style.position = 'fixed';
+        notification.style.top = '50%';
+        notification.style.left = '50%';
+        notification.style.transform = 'translate(-50%, -50%)';
+        notification.style.background = 'rgba(0,0,0,0.8)';
+        notification.style.color = 'white';
+        notification.style.padding = '10px';
+        notification.style.borderRadius = '5px';
+        notification.style.fontSize = '18px';
+        notification.style.fontFamily = 'Ma Shan Zheng, sans-serif';
+        notification.style.zIndex = '300';
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 1000);
+        return;
+    }
+
     let incorrectCount = 0;
     const inputs = document.querySelectorAll('.chinese-input');
     inputs.forEach(input => {
