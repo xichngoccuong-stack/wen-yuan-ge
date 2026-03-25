@@ -273,8 +273,8 @@ document.getElementById('edit-vocab-form-element').addEventListener('submit', as
 
     } catch (error) {
         document.getElementById('spinner').style.display = 'none';
-      console.error('更新词汇失败：', error);
-      alert('更新词汇失败。');
+        console.error('更新词汇失败：', error);
+        alert('更新词汇失败。');
     }
 });
 

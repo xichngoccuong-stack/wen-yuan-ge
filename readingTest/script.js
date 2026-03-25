@@ -24,8 +24,6 @@ window.addEventListener('load', async () => {
     }
     const vocabSnapshot = await query.get();
     const vocabularies = vocabSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log('Vocabularies count:', vocabularies.length);
-    console.log('Category:', category);
 
     // Determine numWords
     let numWords;
@@ -34,7 +32,6 @@ window.addEventListener('load', async () => {
     } else {
         numWords = vocabularies.length;
     }
-    console.log('NumWords:', numWords);
 
     // Random select numWords
     const shuffled = vocabularies.sort(() => 0.5 - Math.random());
@@ -95,62 +92,94 @@ window.addEventListener('load', async () => {
             itemDiv.appendChild(button);
         });
     });
-});
 
-const resultBtn = document.createElement('button');
-resultBtn.textContent = '查看结果';
-resultBtn.className = 'result-btn';
-resultBtn.style.fontSize = '20px';
-resultBtn.style.fontFamily = "'Ma Shan Zheng', sans-serif";
-resultBtn.style.color = 'white';
-resultBtn.style.background = 'linear-gradient(45deg, red, black)';
-resultBtn.style.border = 'none';
-resultBtn.style.padding = '10px 20px';
-resultBtn.style.position = 'fixed';
-resultBtn.style.bottom = '5px';
-resultBtn.style.left = '50%';
-resultBtn.style.transform = 'translateX(-50%)';
-resultBtn.style.zIndex = '1000';
-resultBtn.addEventListener('click', () => {
-    let allCorrect = true;
-    const allItems = document.querySelectorAll('.quiz-question');
-    allItems.forEach(item => {
-        const selected = item.selectedOption;
-        const correct = item.vocab.meaning;
-        if (selected !== correct) {
-            allCorrect = false;
-            // Highlight wrong
-            if (item.selectedButton) {
-                item.selectedButton.style.background = 'linear-gradient(45deg, red, black)';
-                item.selectedButton.style.color = 'white';
+    // Create result button after generating quiz
+    const resultBtn = document.createElement('button');
+    resultBtn.textContent = '查看结果';
+    resultBtn.className = 'result-btn';
+    resultBtn.style.fontSize = '20px';
+    resultBtn.style.fontFamily = "'Ma Shan Zheng', sans-serif";
+    resultBtn.style.color = 'white';
+    resultBtn.style.background = 'linear-gradient(45deg, red, black)';
+    resultBtn.style.border = 'none';
+    resultBtn.style.padding = '10px 20px';
+    resultBtn.style.position = 'fixed';
+    resultBtn.style.bottom = '5px';
+    resultBtn.style.left = '50%';
+    resultBtn.style.transform = 'translateX(-50%)';
+    resultBtn.style.zIndex = '1000';
+    resultBtn.addEventListener('click', () => {
+        let allCorrect = true;
+        const allItems = document.querySelectorAll('.quiz-question');
+        allItems.forEach(item => {
+            const selected = item.selectedOption;
+            const correct = item.vocab.meaning;
+            if (selected !== correct) {
+                allCorrect = false;
+                // Highlight wrong
+                if (item.selectedButton) {
+                    item.selectedButton.style.background = 'linear-gradient(45deg, red, black)';
+                    item.selectedButton.style.color = 'white';
+                }
+                // Highlight correct
+                const correctBtn = Array.from(item.querySelectorAll('.option-btn')).find(btn => btn.textContent === correct);
+                if (correctBtn) {
+                    correctBtn.style.background = 'linear-gradient(45deg, green, black)';
+                    correctBtn.style.color = 'white';
+                }
+                // Keep wrong item visible
+                item.style.display = 'block';
+            } else {
+                // Hide correct item
+                item.style.display = 'none';
             }
-            // Highlight correct
-            const correctBtn = Array.from(item.querySelectorAll('.option-btn')).find(btn => btn.textContent === correct);
-            if (correctBtn) {
-                correctBtn.style.background = 'linear-gradient(45deg, green, black)';
-                correctBtn.style.color = 'white';
-            }
-            // Keep wrong item visible
-            item.style.display = 'block';
+        });
+        if (allCorrect) {
+            document.getElementById('notification').innerHTML = '全部答案都正确！';
+            document.getElementById('notification').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('notification').style.display = 'none';
+                document.getElementById('result-modal').style.display = 'none';
+                document.getElementById('confirm-modal').style.display = 'block';
+            }, 1000);
         } else {
-            // Hide correct item
-            item.style.display = 'none';
+            document.getElementById('notification').innerHTML = '仍有答案不正确，请再查看。';
+            document.getElementById('notification').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('notification').style.display = 'none';
+            }, 1000);
         }
     });
-    if (allCorrect) {
-        showModal('全部答案都正确！');
-        setTimeout(() => {
-            document.getElementById('result-modal').style.display = 'none';
-            document.getElementById('confirm-modal').style.display = 'block';
-        }, 1000);
+    document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
+
+    // Check if there are vocabularies to display
+    if (selectedVocabs.length === 0) {
+        // No vocabularies, keep spinner and disable functions
+        document.getElementById('loading-spinner').style.display = 'block';
+        resultBtn.disabled = true;
+        resultBtn.style.opacity = '0.5';
+        // Disable modal buttons
+        document.getElementById('close-modal').disabled = true;
+        document.getElementById('continue-btn').disabled = true;
+        document.getElementById('home-btn').disabled = true;
+        document.getElementById('close-modal').style.opacity = '0.5';
+        document.getElementById('continue-btn').style.opacity = '0.5';
+        document.getElementById('home-btn').style.opacity = '0.5';
     } else {
-        showModal('仍有答案不正确，请再查看。');
+        // Have vocabularies, hide spinner and enable functions
+        document.getElementById('loading-spinner').style.display = 'none';
+        resultBtn.disabled = false;
+        resultBtn.style.opacity = '1';
+        // Enable modal buttons
+        document.getElementById('close-modal').disabled = false;
+        document.getElementById('continue-btn').disabled = false;
+        document.getElementById('home-btn').disabled = false;
+        document.getElementById('close-modal').style.opacity = '1';
+        document.getElementById('continue-btn').style.opacity = '1';
+        document.getElementById('home-btn').style.opacity = '1';
     }
 });
-document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
 
-// Hide loading spinner
-document.getElementById('loading-spinner').style.display = 'none';
 
 function showModal(text) {
     document.getElementById('modal-text').textContent = text;
