@@ -147,10 +147,49 @@ window.addEventListener('load', async () => {
             document.getElementById('notification').style.display = 'block';
             setTimeout(() => {
                 document.getElementById('notification').style.display = 'none';
+                continueBtn.style.display = 'block';
+                homeBtn.style.display = 'block';
             }, 1000);
+            resultBtn.style.display = 'none';
         }
     });
     document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
+
+    // Create continue and home buttons
+    const continueBtn = document.createElement('button');
+    continueBtn.textContent = '继续';
+    continueBtn.className = 'result-btn';
+    continueBtn.style.fontSize = '20px';
+    continueBtn.style.fontFamily = "'Ma Shan Zheng', sans-serif";
+    continueBtn.style.color = 'white';
+    continueBtn.style.background = 'linear-gradient(45deg, green, black)';
+    continueBtn.style.border = 'none';
+    continueBtn.style.padding = '10px 20px';
+    continueBtn.style.position = 'fixed';
+    continueBtn.style.bottom = '5px';
+    continueBtn.style.left = '45%';
+    continueBtn.style.zIndex = '1000';
+    continueBtn.style.display = 'none';
+    continueBtn.addEventListener('click', () => location.reload());
+
+    const homeBtn = document.createElement('button');
+    homeBtn.textContent = '返回首页';
+    homeBtn.className = 'result-btn';
+    homeBtn.style.fontSize = '20px';
+    homeBtn.style.fontFamily = "'Ma Shan Zheng', sans-serif";
+    homeBtn.style.color = 'white';
+    homeBtn.style.background = 'linear-gradient(45deg, blue, black)';
+    homeBtn.style.border = 'none';
+    homeBtn.style.padding = '10px 20px';
+    homeBtn.style.position = 'fixed';
+    homeBtn.style.bottom = '5px';
+    homeBtn.style.left = '51%';
+    homeBtn.style.zIndex = '1000';
+    homeBtn.style.display = 'none';
+    homeBtn.addEventListener('click', () => window.location.href = '../index.html');
+
+    document.getElementById('reading-test').insertAdjacentElement('afterend', continueBtn);
+    document.getElementById('reading-test').insertAdjacentElement('afterend', homeBtn);
 
     // Check if there are vocabularies to display
     if (selectedVocabs.length === 0) {
