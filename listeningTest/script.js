@@ -138,6 +138,9 @@ function checkResults() {
             incorrectCount++;
         }
     });
+    if (incorrectCount === 0) {
+        document.getElementById('confirm-modal').style.display = 'block';
+    }
     if (incorrectCount > 0) {
         const btn = document.getElementById('submit-btn');
         btn.textContent = '继续';
@@ -158,6 +161,14 @@ async function init() {
 // Start when page loads
 document.addEventListener('DOMContentLoaded', init);
 
-document.getElementById('home-btn').addEventListener('click', function() {
-    window.location.href = '../index.html';
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('continue-btn').addEventListener('click', () => {
+        document.getElementById('confirm-modal').style.display = 'none';
+        window.location.reload();
+    });
+
+    document.getElementById('modal-home-btn').addEventListener('click', () => {
+        document.getElementById('confirm-modal').style.display = 'none';
+        window.location.href = '../index.html';
+    });
 });
