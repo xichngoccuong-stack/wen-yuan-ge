@@ -59,7 +59,7 @@ item.className = 'quiz-question';
 item.innerHTML = `
     <label style="display: block; text-align: center; font-family: 'Shalimar', sans-serif; font-size: 28px;">${vocab.meaning}</label>
     <div style="text-align: center;">
-        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px; width: auto; min-width: 150px; max-width: 400px;" data-correct="${vocab.chinese}">
+        <input type="text" class="chinese-input" style="font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px; width: auto; min-width: 150px; max-width: 400px; display: block; margin: 0 auto;" data-correct="${vocab.chinese}">
     </div>
 `;
 item.setAttribute('data-pinyin', vocab.pinyin);
@@ -73,7 +73,7 @@ submitBtn.id = 'submit-btn';
 submitBtn.className = 'result-btn';
 submitBtn.style.fontFamily = 'Ma Shan Zheng, sans-serif';
 submitBtn.style.position = 'fixed';
-submitBtn.style.bottom = '20px';
+submitBtn.style.bottom = '5px';
 submitBtn.style.left = '50%';
 submitBtn.style.transform = 'translateX(-50%)';
 document.body.appendChild(submitBtn);
