@@ -139,7 +139,25 @@ function checkResults() {
         }
     });
     if (incorrectCount === 0) {
-        document.getElementById('confirm-modal').style.display = 'block';
+        // Show notification for 1 second then open modal
+        const notification = document.createElement('div');
+        notification.textContent = '全部答案都正确！';
+        notification.style.position = 'fixed';
+        notification.style.top = '50%';
+        notification.style.left = '50%';
+        notification.style.transform = 'translate(-50%, -50%)';
+        notification.style.background = 'rgba(0,0,0,0.8)';
+        notification.style.color = 'white';
+        notification.style.padding = '10px';
+        notification.style.borderRadius = '5px';
+        notification.style.fontSize = '18px';
+        notification.style.fontFamily = 'Ma Shan Zheng, sans-serif';
+        notification.style.zIndex = '300';
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            document.body.removeChild(notification);
+            document.getElementById('confirm-modal').style.display = 'block';
+        }, 1000);
     }
     if (incorrectCount > 0) {
         const btn = document.getElementById('submit-btn');
