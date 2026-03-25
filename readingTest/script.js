@@ -154,10 +154,10 @@ window.addEventListener('load', async () => {
 
     // Check if there are vocabularies to display
     if (selectedVocabs.length === 0) {
-        // No vocabularies, keep spinner and disable functions
-        document.getElementById('loading-spinner').style.display = 'block';
-        resultBtn.disabled = true;
-        resultBtn.style.opacity = '0.5';
+        // No vocabularies, hide spinner, hide result button, hide title
+        document.getElementById('loading-spinner').style.display = 'none';
+        resultBtn.style.display = 'none';
+        document.querySelector('.title-container').style.display = 'none';
         // Disable modal buttons
         document.getElementById('close-modal').disabled = true;
         document.getElementById('continue-btn').disabled = true;
@@ -170,6 +170,7 @@ window.addEventListener('load', async () => {
         document.getElementById('loading-spinner').style.display = 'none';
         resultBtn.disabled = false;
         resultBtn.style.opacity = '1';
+        document.querySelector('.title-container').style.display = 'block';
         // Enable modal buttons
         document.getElementById('close-modal').disabled = false;
         document.getElementById('continue-btn').disabled = false;
