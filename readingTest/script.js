@@ -150,8 +150,9 @@ window.addEventListener('load', async () => {
                 continueBtn.style.display = 'block';
                 homeBtn.style.display = 'block';
             }, 1000);
-            resultBtn.style.display = 'none';
         }
+        resultBtn.style.display = 'none';
+        document.querySelector('.title-container').style.display = 'none';
     });
     document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
 
