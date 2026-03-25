@@ -336,3 +336,8 @@ document.getElementById('vocab-form-element').addEventListener('submit', async f
 document.getElementById('read-btn').addEventListener('click', function() {
     window.location.href = 'readingTest/index.html';
 });
+
+// Add event listener for listen-btn to navigate to listening test page
+document.getElementById('listen-btn').addEventListener('click', function() {
+    window.location.href = 'listeningTest/index.html';
+});
