@@ -319,8 +319,7 @@ h1 {
 
 /* ===== DIMMED CLASS ===== */
 .dimmed {
-    opacity: 0.5;
-    pointer-events: none;
+    display: none;
 }
 
 /* ===== OPTION BUTTONS ===== */

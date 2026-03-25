@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Shalimar&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         #video {
             display: block;
@@ -24,10 +26,41 @@
             <img src="../logo.ico" alt="Logo">
             <h1>Vaên Uyeân Caùc</h1>
         </div>
+        <button id="add-phrase-btn" style="background: transparent; border: none; color: white; font-size: 40px; cursor: pointer;">+</button>
     </header>
+
+    <!-- Add Phrase Form -->
+    <div id="phrase-form" class="vocab-form" style="width: 500px;">
+        <h2>添加新对话</h2>
+        <form id="phrase-form-element">
+            <label for="phrase-chinese">中文句子:</label>
+            <input type="text" id="phrase-chinese" required>
+            <label for="phrase-meaning">含义:</label>
+            <input type="text" id="phrase-meaning" required>
+            <label for="phrase-pinyin">拼音:</label>
+            <input type="text" id="phrase-pinyin" required>
+            <label for="phrase-category">类别:</label>
+            <select id="phrase-category">
+                <option value="生活" selected>生活</option>
+                <option value="工作">工作</option>
+                <option value="学习">学习</option>
+            </select>
+            <label for="phrase-audio">音频:</label>
+            <input type="file" id="phrase-audio" accept="audio/mp3">
+            <div class="button-row">
+                <button type="submit">添加</button>
+                <button type="button" id="close-phrase-form">关闭</button>
+            </div>
+        </form>
+    </div>
 
     <!-- Background -->
     <video id="video" src="../background.mp4" muted autoplay loop></video>
+
+    <!-- Phrase List -->
+    <div id="phrase-list" class="vocab-list"></div>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
