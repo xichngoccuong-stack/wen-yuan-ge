@@ -166,7 +166,7 @@ window.addEventListener('load', async () => {
             }, 1000);
         }
         resultBtn.style.display = 'none';
-        document.querySelector('.title-container').style.display = 'none';
+        document.querySelector('.title-container h2').textContent = '选择的词语不正确:';
     });
     document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
 
@@ -250,5 +250,9 @@ document.getElementById('continue-btn').addEventListener('click', () => {
 });
 
 document.getElementById('home-btn').addEventListener('click', () => {
+    window.location.href = '../index.html';
+});
+
+if (document.getElementById('home-header-btn')) document.getElementById('home-header-btn').addEventListener('click', () => {
     window.location.href = '../index.html';
 });
