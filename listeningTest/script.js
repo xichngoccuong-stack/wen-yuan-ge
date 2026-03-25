@@ -131,7 +131,6 @@ function checkResults() {
         if (userInput === correct) {
             item.style.display = 'none';
         } else {
-            input.style.borderColor = 'red';
             input.style.backgroundColor = '#ffdddd';
             // Update label to show Chinese and pinyin
             label.innerHTML = correct + ' | <span style="font-family: \'Shalimar\', sans-serif; font-size: 28px;">' + pinyin + '</span>' + ' |';
