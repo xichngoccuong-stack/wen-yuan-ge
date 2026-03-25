@@ -200,6 +200,10 @@ if (closeQuizForm) {
 document.getElementById('quiz-settings-form-element').addEventListener('submit', async function(e) {
     e.preventDefault();
     const numWords = document.getElementById('num-words').value;
+    if (numWords.trim() !== "" && (parseInt(numWords) <= 0 || isNaN(parseInt(numWords)))) {
+        alert("词汇数必须大于等于1");
+        return;
+    }
     const category = document.getElementById('quiz-category').value;
     const docRef = db.collection('quiz-settings').doc('settings');
     const doc = await docRef.get();

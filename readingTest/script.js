@@ -27,7 +27,7 @@ window.addEventListener('load', async () => {
 
     // Determine numWords
     let numWords;
-    if (settings.numWords && !isNaN(parseInt(settings.numWords))) {
+    if (settings.numWords && !isNaN(parseInt(settings.numWords)) && parseInt(settings.numWords) > 0) {
         numWords = Math.min(parseInt(settings.numWords), vocabularies.length);
     } else {
         numWords = vocabularies.length;
