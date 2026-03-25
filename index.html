@@ -70,10 +70,9 @@
 
         <!-- Edit Vocabulary Form -->
         <div id="edit-vocab-form" class="vocab-form" style="display: none;">
-            <h2>编辑词汇</h2>
+            <h2 id="edit-title" style="font-weight: normal;"></h2>
             <form id="edit-vocab-form-element">
-                <label for="edit-chinese">中文词语:</label>
-                <input type="text" id="edit-chinese" required readonly>
+                <button type="button" id="delete-vocab-btn" style="margin-left: 10px; background: linear-gradient(to right, red, black); color: white; border: none; padding: 10px 20px; font-family: 'Ma Shan Zheng', sans-serif; font-size: 20px;">删除词语</button>
                 <label for="edit-meaning">含义:</label>
                 <input type="text" id="edit-meaning" required>
                 <label for="edit-pinyin">拼音:</label>

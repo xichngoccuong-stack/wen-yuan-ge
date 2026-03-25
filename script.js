@@ -63,7 +63,7 @@ Promise.all([
                 editIcon.addEventListener('click', () => {
                     const docId = item.getAttribute('data-doc-id');
                     // Populate edit form with data
-                    document.getElementById('edit-chinese').value = data.chinese;
+                    document.getElementById('edit-title').textContent = data.chinese;
                     document.getElementById('edit-meaning').value = data.meaning;
                     document.getElementById('edit-pinyin').value = data.pinyin;
                     document.getElementById('edit-hanviet').value = data.hanviet || '';
@@ -280,9 +280,23 @@ document.getElementById('edit-vocab-form-element').addEventListener('submit', as
         console.error('更新词汇失败：', error);
         alert('更新词汇失败。');
     }
-});
-
-// Submit vocab form
+    });
+    
+    // Add event listener for delete vocab button
+    document.getElementById('delete-vocab-btn').addEventListener('click', async function() {
+        const docId = document.getElementById('edit-vocab-form-element').getAttribute('data-doc-id');
+        if (confirm('确定要删除这个词语吗？')) {
+            try {
+                await db.collection('vocabularies').doc(docId).delete();
+                document.getElementById('edit-vocab-form').style.display = 'none';
+                location.reload();
+            } catch (error) {
+                alert('删除失败');
+            }
+        }
+    });
+    
+    // Submit vocab form
 document.getElementById('vocab-form-element').addEventListener('submit', async function(e) {
     e.preventDefault();
     const chinese = document.getElementById('chinese').value;
