@@ -88,6 +88,34 @@ document.getElementById('category-filter').addEventListener('change', (e) => {
     displayPhrases(phrases);
 });
 
+// Listen all button
+document.getElementById('listen-all-btn').addEventListener('click', () => {
+    const filtered = currentCategory === "all" ? phrases : phrases.filter(doc => doc.data().category === currentCategory);
+    let index = 0;
+    const playNext = () => {
+        if (index >= filtered.length) return;
+        const data = filtered[index].data();
+        if (data.audioUrl) {
+            const audio = new Audio(data.audioUrl);
+            audio.play();
+            audio.onended = () => {
+                setTimeout(playNext, 2000);
+            };
+        } else {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(data.chinese);
+                utterance.lang = 'zh-CN';
+                speechSynthesis.speak(utterance);
+                utterance.onend = () => {
+                    setTimeout(playNext, 2000);
+                };
+            }
+        }
+        index++;
+    };
+    playNext();
+});
+
 // Load and display commonPhrases
 db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) => {
     phrases = querySnapshot.docs;
