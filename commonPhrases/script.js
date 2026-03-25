@@ -83,22 +83,28 @@ document.getElementById('close-edit-phrase-form').addEventListener('click', func
 });
 
 // Category filter
-document.getElementById('category-filter').addEventListener('change', (e) => {
+if (document.getElementById('category-filter')) document.getElementById('category-filter').addEventListener('change', (e) => {
     currentCategory = e.target.value;
     displayPhrases(phrases);
 });
 
 // Listen all button
-document.getElementById('listen-all-btn').addEventListener('click', () => {
+if (document.getElementById('listen-all-btn')) document.getElementById('listen-all-btn').addEventListener('click', () => {
+    const button = document.getElementById('listen-all-btn');
+    button.classList.add('dimmed');
     const filtered = currentCategory === "all" ? phrases : phrases.filter(doc => doc.data().category === currentCategory);
     let index = 0;
     const playNext = () => {
-        if (index >= filtered.length) return;
+        if (index >= filtered.length) {
+            button.classList.remove('dimmed');
+            return;
+        }
         const data = filtered[index].data();
         if (data.audioUrl) {
             const audio = new Audio(data.audioUrl);
             audio.play();
             audio.onended = () => {
+                index++;
                 setTimeout(playNext, 2000);
             };
         } else {
@@ -107,11 +113,11 @@ document.getElementById('listen-all-btn').addEventListener('click', () => {
                 utterance.lang = 'zh-CN';
                 speechSynthesis.speak(utterance);
                 utterance.onend = () => {
+                    index++;
                     setTimeout(playNext, 2000);
                 };
             }
         }
-        index++;
     };
     playNext();
 });
