@@ -35,6 +35,11 @@ body {
     z-index: -1;
 }
 
+/* ===== XIANYINGE BUTTON ===== */
+#xianyinge-btn {
+    display: none;
+}
+
 /* ===== HEADER ===== */
 header {
     position: fixed;

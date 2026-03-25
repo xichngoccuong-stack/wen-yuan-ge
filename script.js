@@ -27,6 +27,7 @@ Promise.all([
     document.getElementById('image').style.display = 'none';
     document.getElementById('video').style.display = 'block';
     document.querySelector('header').style.display = 'block';
+    document.getElementById('xianyinge-btn').style.display = 'block';
     
     // Display vocabularies
     const list = document.getElementById('vocab-list');
