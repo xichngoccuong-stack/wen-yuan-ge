@@ -162,7 +162,8 @@ window.addEventListener('load', async () => {
             setTimeout(() => {
                 document.getElementById('notification').style.display = 'none';
                 continueBtn.style.display = 'block';
-                homeBtn.style.display = 'block';
+                continueBtn.style.margin = '0 auto';
+                homeBtn.style.display = 'none';
             }, 1000);
         }
         resultBtn.style.display = 'none';
