@@ -16,27 +16,16 @@ const db = firebase.firestore();
 const cloudName = 'dglxrlydv';
 const uploadPreset = 'vocab_images';
 
-// Show modal on + button click
-document.getElementById('add-phrase-btn').addEventListener('click', function() {
-    document.getElementById('phrase-form').style.display = 'block';
-});
+// Global variables
+let currentCategory = "all";
+let phrases = [];
 
-// Close modal
-document.getElementById('close-phrase-form').addEventListener('click', function() {
-    document.getElementById('phrase-form').style.display = 'none';
-});
-
-// Close edit modal
-document.getElementById('close-edit-phrase-form').addEventListener('click', function() {
-    document.getElementById('edit-phrase-form').style.display = 'none';
-    document.getElementById('edit-phrase-form-element').reset();
-});
-
-// Load and display commonPhrases
-db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) => {
+// Function to display phrases
+const displayPhrases = (docs) => {
     const list = document.getElementById('phrase-list');
     list.innerHTML = '';
-    querySnapshot.forEach((doc) => {
+    const filtered = currentCategory === "all" ? docs : docs.filter(doc => doc.data().category === currentCategory);
+    filtered.forEach((doc) => {
         const data = doc.data();
         const item = document.createElement('div');
         item.setAttribute('data-doc-id', doc.id);
@@ -75,6 +64,34 @@ db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) =
         }
         list.appendChild(item);
     });
+};
+
+// Show modal on + button click
+document.getElementById('add-phrase-btn').addEventListener('click', function() {
+    document.getElementById('phrase-form').style.display = 'block';
+});
+
+// Close modal
+document.getElementById('close-phrase-form').addEventListener('click', function() {
+    document.getElementById('phrase-form').style.display = 'none';
+});
+
+// Close edit modal
+document.getElementById('close-edit-phrase-form').addEventListener('click', function() {
+    document.getElementById('edit-phrase-form').style.display = 'none';
+    document.getElementById('edit-phrase-form-element').reset();
+});
+
+// Category filter
+document.getElementById('category-filter').addEventListener('change', (e) => {
+    currentCategory = e.target.value;
+    displayPhrases(phrases);
+});
+
+// Load and display commonPhrases
+db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) => {
+    phrases = querySnapshot.docs;
+    displayPhrases(phrases);
 }).catch((error) => {
     console.error('Error loading commonPhrases:', error);
 });
@@ -113,13 +130,13 @@ document.getElementById('phrase-form-element').addEventListener('submit', async 
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         setTimeout(() => {
-            document.getElementById('spinner').style.display = 'none';
+            if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
             document.getElementById('phrase-form').style.display = 'none';
             document.getElementById('phrase-form-element').reset();
             location.reload(); // Reload to refresh list
         }, 1000);
     } catch (error) {
-        document.getElementById('spinner').style.display = 'none';
+        if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
         console.error('Error adding phrase:', error);
         alert('添加时发生错误。');
     }
@@ -135,7 +152,7 @@ document.getElementById('edit-phrase-form-element').addEventListener('submit', a
     const category = document.getElementById('edit-phrase-category').value;
     const audioFile = document.getElementById('edit-phrase-audio').files[0];
 
-    document.getElementById('spinner').style.display = 'block';
+    if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'block';
 
     try {
         let audioUrl = null;
@@ -163,13 +180,13 @@ document.getElementById('edit-phrase-form-element').addEventListener('submit', a
 
         await db.collection('commonPhrases').doc(docId).update(updateData);
         setTimeout(() => {
-            document.getElementById('spinner').style.display = 'none';
+            if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
             document.getElementById('edit-phrase-form').style.display = 'none';
             document.getElementById('edit-phrase-form-element').reset();
             location.reload(); // Reload to refresh list
         }, 1000);
     } catch (error) {
-        document.getElementById('spinner').style.display = 'none';
+        if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
         console.error('Error updating phrase:', error);
         alert('更新时发生错误。');
     }
