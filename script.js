@@ -341,3 +341,8 @@ document.getElementById('read-btn').addEventListener('click', function() {
 document.getElementById('listen-btn').addEventListener('click', function() {
     window.location.href = 'listeningTest/index.html';
 });
+
+// Add event listener for translate-btn to navigate to translation test page
+document.getElementById('translate-btn').addEventListener('click', function() {
+    window.location.href = 'translationTest/index.html';
+});
