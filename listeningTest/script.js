@@ -120,6 +120,7 @@ document.body.appendChild(submitBtn);
 }
 
 function checkResults() {
+    let incorrectCount = 0;
     const inputs = document.querySelectorAll('.chinese-input');
     inputs.forEach(input => {
         const correct = input.getAttribute('data-correct');
@@ -128,14 +129,23 @@ function checkResults() {
         const label = item.querySelector('label');
         const pinyin = item.getAttribute('data-pinyin');
         if (userInput === correct) {
-            input.style.borderColor = 'green';
+            item.style.display = 'none';
         } else {
             input.style.borderColor = 'red';
             input.style.backgroundColor = '#ffdddd';
             // Update label to show Chinese and pinyin
             label.innerHTML = correct + ' | <span style="font-family: \'Shalimar\', sans-serif; font-size: 28px;">' + pinyin + '</span>' + ' |';
+            incorrectCount++;
         }
     });
+    if (incorrectCount > 0) {
+        const btn = document.getElementById('submit-btn');
+        btn.textContent = '继续';
+        btn.style.background = 'linear-gradient(to right, green, black)';
+        btn.style.color = 'white';
+        btn.removeEventListener('click', checkResults);
+        btn.addEventListener('click', () => window.location.reload());
+    }
 }
 
 async function init() {
