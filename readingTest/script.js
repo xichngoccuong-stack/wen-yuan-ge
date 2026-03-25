@@ -12,6 +12,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 window.addEventListener('load', async () => {
+    document.getElementById('loading-spinner').style.display = 'block';
     // Load quiz settings
     const settingsDoc = await db.collection('quiz-settings').doc('settings').get();
     const settings = settingsDoc.data() || {};
@@ -234,6 +235,7 @@ window.addEventListener('load', async () => {
         document.getElementById('continue-btn').style.opacity = '1';
         document.getElementById('home-btn').style.opacity = '1';
     }
+    document.getElementById('video').style.display = 'block';
 });
 
 
