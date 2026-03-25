@@ -109,8 +109,22 @@ window.addEventListener('load', async () => {
     resultBtn.style.transform = 'translateX(-50%)';
     resultBtn.style.zIndex = '1000';
     resultBtn.addEventListener('click', () => {
-        let allCorrect = true;
         const allItems = document.querySelectorAll('.quiz-question');
+        let hasUnselected = false;
+        allItems.forEach(item => {
+            if (!item.selectedOption) {
+                hasUnselected = true;
+            }
+        });
+        if (hasUnselected) {
+            document.getElementById('notification').innerHTML = '请先选择所有答案。';
+            document.getElementById('notification').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('notification').style.display = 'none';
+            }, 1000);
+            return;
+        }
+        let allCorrect = true;
         allItems.forEach(item => {
             const selected = item.selectedOption;
             const correct = item.vocab.meaning;
