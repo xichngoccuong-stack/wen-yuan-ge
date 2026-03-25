@@ -166,9 +166,4 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('confirm-modal').style.display = 'none';
         window.location.reload();
     });
-
-    document.getElementById('modal-home-btn').addEventListener('click', () => {
-        document.getElementById('confirm-modal').style.display = 'none';
-        window.location.href = '../index.html';
-    });
 });
