@@ -174,10 +174,14 @@ async function init() {
     await loadQuizSettings();
     await loadVocabularies();
     displayTest();
+    document.getElementById('loading-spinner').style.display = 'none';
 }
 
 // Start when page loads
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('loading-spinner').style.display = 'block';
+    init();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('continue-btn').addEventListener('click', () => {
