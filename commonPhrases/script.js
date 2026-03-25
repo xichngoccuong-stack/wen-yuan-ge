@@ -88,6 +88,11 @@ if (document.getElementById('category-filter')) document.getElementById('categor
     displayPhrases(phrases);
 });
 
+// Home button
+if (document.getElementById('home-btn')) document.getElementById('home-btn').addEventListener('click', () => {
+    window.location.href = '../index.html';
+});
+
 // Listen all button
 if (document.getElementById('listen-all-btn')) document.getElementById('listen-all-btn').addEventListener('click', () => {
     const button = document.getElementById('listen-all-btn');
