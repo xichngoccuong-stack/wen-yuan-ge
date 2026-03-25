@@ -145,6 +145,7 @@ function checkResults() {
         btn.style.color = 'white';
         btn.removeEventListener('click', checkResults);
         btn.addEventListener('click', () => window.location.reload());
+        document.getElementById('test-title').textContent = '输入错误的词:';
     }
 }
 

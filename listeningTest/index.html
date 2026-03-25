@@ -103,7 +103,7 @@
     </header>
 
     <div class="title-container">
-        <h2>听写测试:</h2>
+        <h2 id="test-title">听写测试:</h2>
     </div>
 
     <!-- Background -->
@@ -111,6 +111,12 @@
 
     <!-- Test Container -->
     <div id="listening-test" class="vocab-list"></div>
+
+    <div id="confirm-modal" class="modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:black; padding:20px; border:1px solid white; z-index:2001; color:white; font-family:'Ma Shan Zheng', sans-serif; text-align:center; font-size:24px;">
+        <p>是否想继续练习？</p>
+        <button id="continue-btn" style="font-family:'Ma Shan Zheng', sans-serif; font-size:24px;">继续</button>
+        <button id="home-btn" style="font-family:'Ma Shan Zheng', sans-serif; font-size:24px;">返回首页</button>
+    </div>
 
     <script src="script.js"></script>
 
