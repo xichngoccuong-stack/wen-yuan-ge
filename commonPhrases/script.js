@@ -26,6 +26,12 @@ document.getElementById('close-phrase-form').addEventListener('click', function(
     document.getElementById('phrase-form').style.display = 'none';
 });
 
+// Close edit modal
+document.getElementById('close-edit-phrase-form').addEventListener('click', function() {
+    document.getElementById('edit-phrase-form').style.display = 'none';
+    document.getElementById('edit-phrase-form-element').reset();
+});
+
 // Load and display commonPhrases
 db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) => {
     const list = document.getElementById('phrase-list');
@@ -33,6 +39,7 @@ db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) =
     querySnapshot.forEach((doc) => {
         const data = doc.data();
         const item = document.createElement('div');
+        item.setAttribute('data-doc-id', doc.id);
         item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span></div>`;
         const speakerIcon = item.querySelector('.speaker-icon');
         if (speakerIcon) {
@@ -51,6 +58,21 @@ db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) =
                 }
             });
         }
+        const editIcon = item.querySelector('.edit-icon');
+        if (editIcon) {
+            editIcon.addEventListener('click', () => {
+                const docId = item.getAttribute('data-doc-id');
+                // Populate edit form with data
+                document.getElementById('edit-phrase-chinese').value = data.chinese;
+                document.getElementById('edit-phrase-meaning').value = data.meaning;
+                document.getElementById('edit-phrase-pinyin').value = data.pinyin;
+                document.getElementById('edit-phrase-category').value = data.category || '生活';
+                // Show edit modal
+                document.getElementById('edit-phrase-form').style.display = 'block';
+                // Store docId for submit
+                document.getElementById('edit-phrase-form-element').setAttribute('data-doc-id', docId);
+            });
+        }
         list.appendChild(item);
     });
 }).catch((error) => {
@@ -66,28 +88,89 @@ document.getElementById('phrase-form-element').addEventListener('submit', async 
     const category = document.getElementById('phrase-category').value;
     const audioFile = document.getElementById('phrase-audio').files[0];
 
-    let audioUrl = null;
-    if (audioFile) {
-        const formData = new FormData();
-        formData.append('file', audioFile);
-        formData.append('upload_preset', uploadPreset);
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-        audioUrl = result.secure_url;
-    }
+    if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'block';
 
-    await db.collection('commonPhrases').add({
-        chinese: chinese,
-        meaning: meaning,
-        pinyin: pinyin,
-        category: category,
-        audioUrl: audioUrl,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    document.getElementById('phrase-form').style.display = 'none';
-    document.getElementById('phrase-form-element').reset();
-    location.reload(); // Reload to refresh list
+    try {
+        let audioUrl = null;
+        if (audioFile) {
+            const formData = new FormData();
+            formData.append('file', audioFile);
+            formData.append('upload_preset', uploadPreset);
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            audioUrl = result.secure_url;
+        }
+
+        await db.collection('commonPhrases').add({
+            chinese: chinese,
+            meaning: meaning,
+            pinyin: pinyin,
+            category: category,
+            audioUrl: audioUrl,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        setTimeout(() => {
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('phrase-form').style.display = 'none';
+            document.getElementById('phrase-form-element').reset();
+            location.reload(); // Reload to refresh list
+        }, 1000);
+    } catch (error) {
+        document.getElementById('spinner').style.display = 'none';
+        console.error('Error adding phrase:', error);
+        alert('添加时发生错误。');
+    }
+});
+
+// Submit edit phrase form
+document.getElementById('edit-phrase-form-element').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const docId = this.getAttribute('data-doc-id');
+    const chinese = document.getElementById('edit-phrase-chinese').value;
+    const meaning = document.getElementById('edit-phrase-meaning').value;
+    const pinyin = document.getElementById('edit-phrase-pinyin').value;
+    const category = document.getElementById('edit-phrase-category').value;
+    const audioFile = document.getElementById('edit-phrase-audio').files[0];
+
+    document.getElementById('spinner').style.display = 'block';
+
+    try {
+        let audioUrl = null;
+        if (audioFile) {
+            const formData = new FormData();
+            formData.append('file', audioFile);
+            formData.append('upload_preset', uploadPreset);
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            audioUrl = result.secure_url;
+        }
+
+        const updateData = {
+            chinese: chinese,
+            meaning: meaning,
+            pinyin: pinyin,
+            category: category
+        };
+        if (audioUrl) {
+            updateData.audioUrl = audioUrl;
+        }
+
+        await db.collection('commonPhrases').doc(docId).update(updateData);
+        setTimeout(() => {
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('edit-phrase-form').style.display = 'none';
+            document.getElementById('edit-phrase-form-element').reset();
+            location.reload(); // Reload to refresh list
+        }, 1000);
+    } catch (error) {
+        document.getElementById('spinner').style.display = 'none';
+        console.error('Error updating phrase:', error);
+        alert('更新时发生错误。');
+    }
 });

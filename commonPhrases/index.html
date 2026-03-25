@@ -54,11 +54,37 @@
         </form>
     </div>
 
+    <!-- Edit Phrase Form -->
+    <div id="edit-phrase-form" class="vocab-form" style="display: none;">
+        <h2>编辑对话</h2>
+        <form id="edit-phrase-form-element">
+            <label for="edit-phrase-chinese">中文句子:</label>
+            <input type="text" id="edit-phrase-chinese" required>
+            <label for="edit-phrase-meaning">含义:</label>
+            <input type="text" id="edit-phrase-meaning" required>
+            <label for="edit-phrase-pinyin">拼音:</label>
+            <input type="text" id="edit-phrase-pinyin" required>
+            <label for="edit-phrase-category">类别:</label>
+            <select id="edit-phrase-category">
+                <option value="生活" selected>生活</option>
+                <option value="工作">工作</option>
+                <option value="学习">学习</option>
+            </select>
+            <label for="edit-phrase-audio">音频:</label>
+            <input type="file" id="edit-phrase-audio" accept="audio/mp3">
+            <div class="button-row">
+                <button type="submit">更新</button>
+                <button type="button" id="close-edit-phrase-form">关闭</button>
+            </div>
+        </form>
+    </div>
+
     <!-- Background -->
     <video id="video" src="../background.mp4" muted autoplay loop></video>
 
     <!-- Phrase List -->
     <div id="phrase-list" class="vocab-list"></div>
+    <div id="spinner" class="spinner"></div>
 
     <script src="script.js"></script>
 
