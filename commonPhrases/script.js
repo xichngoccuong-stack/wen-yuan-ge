@@ -131,11 +131,15 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
 });
 
 // Load and display commonPhrases
+if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'block';
 db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) => {
     phrases = querySnapshot.docs;
     displayPhrases(phrases);
+    if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
+    document.getElementById('video').style.display = 'block';
 }).catch((error) => {
     console.error('Error loading commonPhrases:', error);
+    if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
 });
 
 // Submit phrase form
