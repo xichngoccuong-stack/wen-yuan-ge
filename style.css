@@ -128,6 +128,20 @@ h1 {
     color: transparent;
 }
 
+#add-vocab-link {
+    background: linear-gradient(to right, yellow, green);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+#xian-yin-ge-link {
+    background: linear-gradient(to right, red, orange);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
 
 /* ===== SEARCH FILTER ROW ===== */
 .search-filter-row {
