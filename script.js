@@ -229,7 +229,7 @@ document.getElementById('quiz-settings-form-element').addEventListener('submit',
 document.getElementById('edit-vocab-form-element').addEventListener('submit', async function(e) {
     e.preventDefault();
     const docId = this.getAttribute('data-doc-id');
-    const chinese = document.getElementById('edit-chinese').value;
+    const chinese = document.getElementById('edit-title').textContent;
     const meaning = document.getElementById('edit-meaning').value;
     const pinyin = document.getElementById('edit-pinyin').value;
     const hanviet = document.getElementById('edit-hanviet').value;
