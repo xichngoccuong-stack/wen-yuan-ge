@@ -17,7 +17,13 @@ const db = firebase.firestore();
 const cloudName = 'dglxrlydv';
 const uploadPreset = 'vocab_images';
 
-document.querySelector('header').style.display = 'none';
+document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('header');
+    if (header) header.style.display = 'none';
+
+    const authorLink = document.getElementById('author-link');
+    if (authorLink) authorLink.style.display = 'none';
+});
 
 Promise.all([
     new Promise(resolve => setTimeout(resolve, 2000)),
