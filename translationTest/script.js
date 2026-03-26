@@ -63,6 +63,7 @@ item.innerHTML = `
     </div>
 `;
 item.setAttribute('data-pinyin', vocab.pinyin);
+item.setAttribute('data-meaning', vocab.meaning);
 container.appendChild(item);
 });
 
@@ -120,12 +121,13 @@ function checkResults() {
         const item = input.closest('.quiz-question');
         const label = item.querySelector('label');
         const pinyin = item.getAttribute('data-pinyin');
+        const meaning = item.getAttribute('data-meaning');
         if (userInput === correct) {
             item.style.display = 'none';
         } else {
             input.style.color = 'red';
-            // Update label to show Chinese and pinyin
-            label.innerHTML = '<span style="font-family: \'Ma Shan Zheng\', sans-serif; font-size: 20px;">' + correct + '</span> | <span style="font-family: \'Shalimar\', sans-serif; font-size: 28px;">' + pinyin + '</span>' + ' |';
+            // Update label to show Chinese, pinyin, and meaning
+            label.innerHTML = '<span style="font-family: \'Ma Shan Zheng\', sans-serif; font-size: 20px;">' + correct + '</span> | <span style="font-family: \'Shalimar\', sans-serif; font-size: 28px;">' + pinyin + '</span>' + ' |<br>' + meaning;
             incorrectCount++;
         }
     });
