@@ -8,7 +8,7 @@
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
     font-family: "Segoe UI", sans-serif;
 }
 
@@ -248,12 +248,12 @@ h1 {
     color: white;
     font-family: 'Ma Shan Zheng', sans-serif;
     font-size: 18px;
-    max-height: 98vh;
+    max-height: 90vh;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    width: 98vw;
+    width: 95vw;
     background: transparent;
 }
 
