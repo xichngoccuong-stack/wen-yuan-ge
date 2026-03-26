@@ -87,7 +87,7 @@ h1 {
 /* ===== MENU ===== */
 .menu-container {
     position: fixed;
-    top: 110px;
+    top: 100px;
     left: 20px;
 }
 
@@ -146,7 +146,7 @@ h1 {
 /* ===== SEARCH FILTER ROW ===== */
 .search-filter-row {
     position: fixed;
-    top: 120px;
+    top: 110px;
     left: 62px;
     display: flex;
     gap: 10px;
@@ -243,7 +243,7 @@ h1 {
 /* ===== VOCAB LIST ===== */
 .vocab-list {
     position: fixed;
-    top: 150px;
+    top: 140px;
     left: 60px;
     right: 0;
     bottom: 0;
