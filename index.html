@@ -24,7 +24,6 @@
             <div id="menu-dropdown" class="menu-dropdown">
                 <ul>
                     <li><a href="#" id="add-vocab-link">✦ 生词</a></li>
-                    <li><a href="#" id="setup-quiz-link">✦ 设置检查</a></li>
                     <li><a href="#" id="check-vocab-link">✦ 检查词汇</a></li>
                     <li><a href="commonPhrases/index.html" id="common-phrases-link" style="background: linear-gradient(to right, green, orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✦ 日常用语</a></li>
                 </ul>
@@ -94,29 +93,24 @@
             </form>
         </div>
 
-        <!-- Quiz Settings Modal -->
-        <div id="quiz-settings-form" class="vocab-form" style="display: none;">
-            <h2 style="font-weight: normal;">设置检查</h2>
-            <form id="quiz-settings-form-element">
-                <label for="num-words">词汇数:</label>
-                <input type="number" id="num-words">
-                <label for="quiz-category">类别:</label>
-                <select id="quiz-category">
+        <!-- Check Vocab Modal -->
+        <div id="check-vocab-modal" class="vocab-form" style="display: none;">
+            <h2 style="font-weight: normal; color: black;">检查词汇</h2>
+            <p style="color: black;">设置检查参数:</p>
+            <form id="quiz-settings-form-element" style="gap: 5px;">
+                <label for="num-words" style="color: black; margin-top: 5px;">词汇数:</label>
+                <input type="number" id="num-words" style="margin-bottom: 5px;">
+                <label for="quiz-category" style="color: black; margin-top: 5px;">类别:</label>
+                <select id="quiz-category" style="margin-bottom: 10px;">
                     <option value="全部" selected>全部</option>
                     <option value="生活">生活</option>
                     <option value="工作">工作</option>
                     <option value="学习">学习</option>
                 </select>
-                <div class="button-row">
-                    <button type="submit">保存</button>
-                    <button type="button" id="close-quiz-form">关闭</button>
+                <div class="button-row" style="justify-content: center;">
+                    <button type="submit" style="margin: 0 auto;">保存设置</button>
                 </div>
             </form>
-        </div>
-
-        <!-- Check Vocab Modal -->
-        <div id="check-vocab-modal" class="vocab-form" style="display: none;">
-            <h2 style="font-weight: normal; color: black;">检查词汇</h2>
             <p style="color: black;">请选择检查类型:</p>
             <div class="button-row">
                 <button type="button" id="read-btn">读</button>

@@ -135,11 +135,22 @@ document.getElementById('menu-button').addEventListener('click', function() {
 });
 
 // Check vocab modal toggle
-document.getElementById('check-vocab-link').addEventListener('click', function(e) {
+document.getElementById('check-vocab-link').addEventListener('click', async function(e) {
     e.preventDefault();
     document.getElementById('check-vocab-modal').style.display = 'block';
     document.getElementById('menu-dropdown').style.display = 'none';
     // Keep dimmed
+    // Load quiz settings
+    const docRef = db.collection('quiz-settings').doc('settings');
+    const doc = await docRef.get();
+    if (doc.exists) {
+        const data = doc.data();
+        document.getElementById('num-words').value = data.numWords || '';
+        document.getElementById('quiz-category').value = data.category || '全部';
+    } else {
+        document.getElementById('num-words').value = '';
+        document.getElementById('quiz-category').value = '全部';
+    }
 });
 
 // Close check vocab modal
@@ -171,31 +182,6 @@ document.getElementById('close-edit-form').addEventListener('click', function() 
     document.getElementById('edit-vocab-form-element').reset();
 });
 
-// Show quiz settings form
-document.getElementById('setup-quiz-link').addEventListener('click', async function(e) {
-    e.preventDefault();
-    document.getElementById('quiz-settings-form').style.display = 'block';
-    document.getElementById('menu-dropdown').style.display = 'none';
-    document.getElementById('search-input').classList.remove('dimmed');
-    document.getElementById('category-filter').classList.remove('dimmed');
-    document.getElementById('vocab-list').classList.remove('dimmed');
-    const docRef = db.collection('quiz-settings').doc('settings');
-    const doc = await docRef.get();
-    if (doc.exists) {
-        const data = doc.data();
-        document.getElementById('num-words').value = data.numWords || '';
-        document.getElementById('quiz-category').value = data.category || '';
-    }
-});
-
-// Close quiz settings form
-const closeQuizForm = document.getElementById('close-quiz-form');
-if (closeQuizForm) {
-    closeQuizForm.addEventListener('click', function() {
-        document.getElementById('quiz-settings-form').style.display = 'none';
-        document.getElementById('quiz-settings-form-element').reset();
-    });
-}
 
 // Submit quiz settings form
 document.getElementById('quiz-settings-form-element').addEventListener('submit', async function(e) {
@@ -219,12 +205,23 @@ document.getElementById('quiz-settings-form-element').addEventListener('submit',
             category: category
         });
     }
-    document.getElementById('quiz-settings-form').style.display = 'none';
-    document.getElementById('quiz-settings-form-element').reset();
-    document.getElementById('notification').innerHTML = '设置已保存！';
-    document.getElementById('notification').style.display = 'block';
+    // Show success notification without closing modal
+    const successMsg = document.createElement('div');
+    successMsg.textContent = '设置已保存！';
+    successMsg.style.position = 'fixed';
+    successMsg.style.top = '50%';
+    successMsg.style.left = '50%';
+    successMsg.style.transform = 'translate(-50%, -50%)';
+    successMsg.style.background = 'rgba(0,0,0,0.8)';
+    successMsg.style.color = 'white';
+    successMsg.style.padding = '10px';
+    successMsg.style.borderRadius = '5px';
+    successMsg.style.fontSize = '18px';
+    successMsg.style.fontFamily = 'Ma Shan Zheng, sans-serif';
+    successMsg.style.zIndex = '3000';
+    document.body.appendChild(successMsg);
     setTimeout(() => {
-        document.getElementById('notification').style.display = 'none';
+        document.body.removeChild(successMsg);
     }, 1000);
 });
 
