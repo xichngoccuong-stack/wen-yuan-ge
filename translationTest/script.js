@@ -77,9 +77,10 @@ submitBtn.id = 'submit-btn';
 submitBtn.className = 'result-btn';
 submitBtn.style.fontFamily = 'Ma Shan Zheng, sans-serif';
 submitBtn.style.position = 'fixed';
-submitBtn.style.bottom = '5px';
-submitBtn.style.left = '50%';
+submitBtn.style.bottom = '570px';
+submitBtn.style.left = '29%';
 submitBtn.style.transform = 'translateX(-50%)';
+submitBtn.style.zIndex = '2000';
 document.body.appendChild(submitBtn);
 
 // Add event listeners
