@@ -98,7 +98,7 @@ Promise.all([
             }
             list.appendChild(item);
         });
-        document.getElementById('vocab-count').innerHTML = '<span style="font-family: \'Ma Shan Zheng\', cursive;">总共</span><span style="font-family: Caveat, cursive;">' + filteredVocabularies.length + '</span><span style="font-family: \'Ma Shan Zheng\', cursive;"> 词</span>';
+        document.getElementById('vocab-count').innerHTML = '<span style="font-family: \'Ma Shan Zheng\', cursive;">总</span><br><span style="font-family: \'Ma Shan Zheng\', cursive;">共</span><br><span style="font-family: Caveat, cursive;">' + filteredVocabularies.length + '</span><br><span style="font-family: \'Ma Shan Zheng\', cursive;">词</span>';
     }
 
     displayVocabularies(vocabularies);
@@ -150,12 +150,14 @@ document.getElementById('menu-button').addEventListener('click', function() {
         categoryFilter.classList.remove('dimmed');
         vocabList.classList.remove('dimmed');
         vocabCount.classList.remove('dimmed');
+        vocabCount.style.display = 'flex';
     } else {
         dropdown.style.display = 'block';
         searchInput.classList.add('dimmed');
         categoryFilter.classList.add('dimmed');
         vocabList.classList.add('dimmed');
         vocabCount.classList.add('dimmed');
+        vocabCount.style.display = 'none';
     }
 });
 
