@@ -142,17 +142,20 @@ document.getElementById('menu-button').addEventListener('click', function() {
     const searchInput = document.getElementById('search-input');
     const categoryFilter = document.getElementById('category-filter');
     const vocabList = document.getElementById('vocab-list');
+    const vocabCount = document.getElementById('vocab-count');
 
     if (dropdown.style.display === 'block') {
         dropdown.style.display = 'none';
         searchInput.classList.remove('dimmed');
         categoryFilter.classList.remove('dimmed');
         vocabList.classList.remove('dimmed');
+        vocabCount.classList.remove('dimmed');
     } else {
         dropdown.style.display = 'block';
         searchInput.classList.add('dimmed');
         categoryFilter.classList.add('dimmed');
         vocabList.classList.add('dimmed');
+        vocabCount.classList.add('dimmed');
     }
 });
 
