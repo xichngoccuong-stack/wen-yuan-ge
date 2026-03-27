@@ -247,12 +247,13 @@ h1 {
     left: 60px;
     right: 0;
     bottom: 0;
-    overflow-y: auto;
+    overflow-y: scroll;
     color: white;
     font-family: 'Ma Shan Zheng', sans-serif;
     font-size: 18px;
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
     gap: 10px;
     background: transparent;
     z-index: 50;
