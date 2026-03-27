@@ -153,9 +153,11 @@ document.getElementById('check-vocab-link').addEventListener('click', async func
         const data = doc.data();
         document.getElementById('num-words').value = data.numWords || '';
         document.getElementById('quiz-category').value = data.category || '全部';
+        document.getElementById('include-gucu').checked = data.includeGucu || false;
     } else {
         document.getElementById('num-words').value = '';
         document.getElementById('quiz-category').value = '全部';
+        document.getElementById('include-gucu').checked = false;
     }
 });
 
@@ -198,17 +200,20 @@ document.getElementById('quiz-settings-form-element').addEventListener('submit',
         return;
     }
     const category = document.getElementById('quiz-category').value;
+    const includeGucu = document.getElementById('include-gucu').checked;
     const docRef = db.collection('quiz-settings').doc('settings');
     const doc = await docRef.get();
     if (doc.exists) {
         await docRef.update({
             numWords: numWords,
-            category: category
+            category: category,
+            includeGucu: includeGucu
         });
     } else {
         await docRef.set({
             numWords: numWords,
-            category: category
+            category: category,
+            includeGucu: includeGucu
         });
     }
     // Show success notification without closing modal

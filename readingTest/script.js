@@ -17,11 +17,14 @@ window.addEventListener('load', async () => {
     const settingsDoc = await db.collection('quiz-settings').doc('settings').get();
     const settings = settingsDoc.data() || {};
     const category = settings.category || '全部';
+    const includeGucu = settings.includeGucu || false;
 
     // Load vocabularies
     let query = db.collection('vocabularies');
     if (category !== '全部') {
         query = query.where('category', '==', category);
+    } else if (!includeGucu) {
+        query = query.where('category', 'in', ['生活', '工作', '学习']);
     }
     const vocabSnapshot = await query.get();
     const vocabularies = vocabSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

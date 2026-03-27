@@ -25,6 +25,7 @@ async function loadQuizSettings() {
         const data = doc.data();
         quizSettings.numWords = data.numWords || null;
         quizSettings.category = data.category || '全部';
+        quizSettings.includeGucu = data.includeGucu || false;
     }
 }
 
@@ -39,6 +40,8 @@ async function loadVocabularies() {
     // Filter by category
     if (quizSettings.category !== '全部') {
         vocabularies = vocabularies.filter(vocab => vocab.category === quizSettings.category);
+    } else if (!quizSettings.includeGucu) {
+        vocabularies = vocabularies.filter(vocab => ['生活', '工作', '学习'].includes(vocab.category));
     }
 
     // Shuffle and take numWords
