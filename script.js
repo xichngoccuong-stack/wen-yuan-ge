@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 Promise.all([
     new Promise(resolve => setTimeout(resolve, 2000)),
     document.fonts.ready,
-    db.collection('vocabularies').orderBy('hanviet').get(),
+    db.collection('vocabularies').orderBy('meaning').get(),
     db.collection('quiz-settings').doc('settings').get()
 ]).then(([_timeout, _fonts, querySnapshot, settingsDoc]) => {
     document.getElementById('image').style.display = 'none';
@@ -98,6 +98,7 @@ Promise.all([
             }
             list.appendChild(item);
         });
+        document.getElementById('vocab-count').textContent = '总词数 ' + filteredVocabularies.length;
     }
 
     displayVocabularies(vocabularies);
