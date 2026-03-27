@@ -387,7 +387,7 @@ h1 {
     position: absolute;
     top: 140px;
     left: 20px;
-    text-align: right;
+    text-align: center;
 }
 
 #vocab-count span {
