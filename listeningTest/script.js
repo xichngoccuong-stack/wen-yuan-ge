@@ -96,8 +96,8 @@ submitBtn.id = 'submit-btn';
 submitBtn.className = 'result-btn';
 submitBtn.style.fontFamily = 'Ma Shan Zheng, sans-serif';
 submitBtn.style.position = 'fixed';
-submitBtn.style.bottom = '20px';
-submitBtn.style.left = '50%';
+submitBtn.style.bottom = '570px';
+submitBtn.style.left = '27%';
 submitBtn.style.transform = 'translateX(-50%)';
 document.body.appendChild(submitBtn);
 
