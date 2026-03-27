@@ -28,8 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
 Promise.all([
     new Promise(resolve => setTimeout(resolve, 2000)),
     document.fonts.ready,
-    db.collection('vocabularies').orderBy('hanviet').get()
-]).then(([_timeout, _fonts, querySnapshot]) => {
+    db.collection('vocabularies').orderBy('hanviet').get(),
+    db.collection('quiz-settings').doc('settings').get()
+]).then(([_timeout, _fonts, querySnapshot, settingsDoc]) => {
     document.getElementById('image').style.display = 'none';
     document.getElementById('video').style.display = 'block';
     document.querySelector('header').style.display = 'block';
@@ -41,6 +42,15 @@ Promise.all([
     querySnapshot.forEach((doc) => {
         vocabularies.push({ id: doc.id, ...doc.data() });
     });
+
+    let includeGucu = true;
+    if (settingsDoc.exists) {
+        const data = settingsDoc.data();
+        includeGucu = data.includeGucu !== false;
+    }
+    if (!includeGucu) {
+        vocabularies = vocabularies.filter(vocab => vocab.category !== '古词');
+    }
 
     function displayVocabularies(filteredVocabularies) {
         list.innerHTML = '';
