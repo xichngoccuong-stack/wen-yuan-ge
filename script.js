@@ -50,6 +50,11 @@ Promise.all([
     }
     if (!includeGucu) {
         vocabularies = vocabularies.filter(vocab => vocab.category !== '古词');
+        const categoryFilter = document.getElementById('category-filter');
+        const gucuOption = categoryFilter.querySelector('option[value="古词"]');
+        if (gucuOption) {
+            gucuOption.remove();
+        }
     }
 
     function displayVocabularies(filteredVocabularies) {
