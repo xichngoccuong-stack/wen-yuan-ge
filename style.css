@@ -386,7 +386,8 @@ h1 {
     flex-direction: column;
     position: absolute;
     top: 140px;
-    left: 30px;
+    left: 20px;
+    text-align: right;
 }
 
 #vocab-count span {
