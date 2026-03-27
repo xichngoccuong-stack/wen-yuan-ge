@@ -98,7 +98,7 @@ Promise.all([
             }
             list.appendChild(item);
         });
-        document.getElementById('vocab-count').textContent = '总词数 ' + filteredVocabularies.length;
+        document.getElementById('vocab-count').innerHTML = '<span style="font-family: \'Ma Shan Zheng\', cursive;">总词数 </span><span style="font-family: Caveat, cursive;">' + filteredVocabularies.length + '</span>';
     }
 
     displayVocabularies(vocabularies);
