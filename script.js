@@ -102,6 +102,44 @@ Promise.all([
     }
 
     displayVocabularies(vocabularies);
+    let currentFilteredVocabularies = vocabularies;
+    let playState = 'idle';
+    let stopFlag = false;
+    let playIndex = 0;
+
+    const playNext = () => {
+        if (stopFlag || playIndex >= currentFilteredVocabularies.length) {
+            if (playIndex >= currentFilteredVocabularies.length) {
+                playState = 'idle';
+                const button = document.getElementById('listen-all-btn');
+                button.textContent = '听所有词汇';
+            }
+            return;
+        }
+        const vocab = currentFilteredVocabularies[playIndex];
+        if (vocab.audioUrl) {
+            const audio = new Audio(vocab.audioUrl);
+            audio.play();
+            audio.onended = () => {
+                setTimeout(() => {
+                    playIndex++;
+                    playNext();
+                }, 1000);
+            };
+        } else {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(vocab.chinese);
+                utterance.lang = 'zh-CN';
+                speechSynthesis.speak(utterance);
+                utterance.onend = () => {
+                    setTimeout(() => {
+                        playIndex++;
+                        playNext();
+                    }, 1000);
+                };
+            }
+        }
+    };
     
     // Search functionality
     document.getElementById('search-input').addEventListener('input', (e) => {
@@ -131,6 +169,29 @@ Promise.all([
             return matchesSearch && matchesCategory;
         });
         displayVocabularies(filtered);
+        currentFilteredVocabularies = filtered;
+    });
+
+    // Add event listener for listen-all-btn
+    const button = document.getElementById('listen-all-btn');
+    button.addEventListener('click', function() {
+        if (playState === 'idle') {
+            playIndex = 0;
+            stopFlag = false;
+            playState = 'playing';
+            button.textContent = '停止';
+            playNext();
+        } else if (playState === 'playing') {
+            stopFlag = true;
+            playState = 'stopped';
+            button.textContent = '从头播放';
+        } else if (playState === 'stopped') {
+            playIndex = 0;
+            stopFlag = false;
+            playState = 'playing';
+            button.textContent = '停止';
+            playNext();
+        }
     });
 }).catch((error) => {
     console.error('添加词汇时出错:', error);
