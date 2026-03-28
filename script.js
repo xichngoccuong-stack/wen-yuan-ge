@@ -204,6 +204,7 @@ document.getElementById('menu-button').addEventListener('click', function() {
     const categoryFilter = document.getElementById('category-filter');
     const vocabList = document.getElementById('vocab-list');
     const vocabCount = document.getElementById('vocab-count');
+    const listenAllBtn = document.getElementById('listen-all-btn');
 
     if (dropdown.style.display === 'block') {
         dropdown.style.display = 'none';
@@ -212,6 +213,7 @@ document.getElementById('menu-button').addEventListener('click', function() {
         vocabList.classList.remove('dimmed');
         vocabCount.classList.remove('dimmed');
         vocabCount.style.display = 'flex';
+        listenAllBtn.style.display = '';
     } else {
         dropdown.style.display = 'block';
         searchInput.classList.add('dimmed');
@@ -219,6 +221,7 @@ document.getElementById('menu-button').addEventListener('click', function() {
         vocabList.classList.add('dimmed');
         vocabCount.classList.add('dimmed');
         vocabCount.style.display = 'none';
+        listenAllBtn.style.display = 'none';
     }
 });
 
