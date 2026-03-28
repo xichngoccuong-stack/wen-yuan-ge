@@ -107,10 +107,8 @@ window.addEventListener('load', async () => {
     resultBtn.style.background = 'linear-gradient(45deg, red, black)';
     resultBtn.style.border = 'none';
     resultBtn.style.padding = '10px 20px';
-    resultBtn.style.position = 'fixed';
-    resultBtn.style.bottom = '570px';
-    resultBtn.style.left = '31%';
-    resultBtn.style.transform = 'translateX(-50%)';
+    resultBtn.style.width = '100%';
+    resultBtn.style.textAlign = 'center';
     resultBtn.style.zIndex = '1000';
     resultBtn.addEventListener('click', () => {
         const allItems = document.querySelectorAll('.quiz-question');
@@ -173,7 +171,7 @@ window.addEventListener('load', async () => {
         resultBtn.style.display = 'none';
         document.querySelector('.title-container h2').textContent = '选择的词语不正确:';
     });
-    document.getElementById('reading-test').insertAdjacentElement('afterend', resultBtn);
+    document.getElementById('reading-test').appendChild(resultBtn);
 
     // Create continue and home buttons
     const continueBtn = document.createElement('button');
