@@ -95,11 +95,10 @@ submitBtn.textContent = '查看结果';
 submitBtn.id = 'submit-btn';
 submitBtn.className = 'result-btn';
 submitBtn.style.fontFamily = 'Ma Shan Zheng, sans-serif';
-submitBtn.style.position = 'fixed';
-submitBtn.style.bottom = '570px';
-submitBtn.style.left = '27%';
-submitBtn.style.transform = 'translateX(-50%)';
-document.body.appendChild(submitBtn);
+submitBtn.style.width = '100%';
+submitBtn.style.textAlign = 'center';
+submitBtn.style.zIndex = '1000';
+document.getElementById('listening-test').appendChild(submitBtn);
 
     // Add event listeners
     document.querySelectorAll('.play-btn').forEach(btn => {
