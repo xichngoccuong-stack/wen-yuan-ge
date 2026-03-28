@@ -54,21 +54,8 @@
         .result-btn {
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7);
-            animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 255, 0, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 0, 0);
-            }
-        }
-        .result-btn:hover::before {
+        .result-btn::before {
             content: '';
             position: absolute;
             top: 0;
