@@ -21,20 +21,18 @@
             display: block;
         }
         .listen-btn {
-            position: fixed;
-            bottom: 580px;
-            left: 4%;
-            transform: none;
-            background: linear-gradient(to right, red, black);
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            background: linear-gradient(45deg, red, black);
             color: white;
             border: none;
             padding: 10px 20px;
             font-family: 'Ma Shan Zheng', sans-serif;
-            font-size: 20px;
             box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
             animation: pulse 2s infinite;
             overflow: hidden;
-            z-index: 1001;
+            z-index: 1000;
         }
         @keyframes pulse {
             0% {
@@ -136,11 +134,11 @@
     <!-- Phrase List -->
     <div id="phrase-list" class="vocab-list"></div>
     <div id="spinner" class="spinner"></div>
+    <script src="script.js"></script>
 
+    
     <button id="listen-all-btn" class="listen-btn">听全部</button>
     <div id="playing-message" class="listen-btn" style="display: none; font-size: 20px; background: linear-gradient(to right, green, black); animation: none;">正在自动播放音频</div>
-
-    <script src="script.js"></script>
 
     <!-- Author Link -->
     <div id="author-link" style="position: fixed; bottom: 25px; left: 98%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: flex-start;">

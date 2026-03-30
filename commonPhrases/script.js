@@ -64,6 +64,14 @@ const displayPhrases = (docs) => {
         }
         list.appendChild(item);
     });
+
+    // Move listen-all-btn to the end of phrase-list
+    const listenBtn = document.getElementById('listen-all-btn');
+    const playingMsg = document.getElementById('playing-message');
+    if (listenBtn && playingMsg) {
+        list.appendChild(listenBtn);
+        list.appendChild(playingMsg);
+    }
 };
 
 // Show modal on + button click
