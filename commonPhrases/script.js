@@ -145,6 +145,8 @@ db.collection('commonPhrases').orderBy('timestamp').get().then((querySnapshot) =
     displayPhrases(phrases);
     if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
     document.getElementById('video').style.display = 'block';
+    // Show listen button after phrases are loaded
+    document.getElementById('listen-all-btn').style.display = 'block';
 }).catch((error) => {
     console.error('Error loading commonPhrases:', error);
     if (document.getElementById('spinner')) document.getElementById('spinner').style.display = 'none';
