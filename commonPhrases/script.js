@@ -25,44 +25,65 @@ const displayPhrases = (docs) => {
     const list = document.getElementById('phrase-list');
     list.innerHTML = '';
     const filtered = currentCategory === "all" ? docs : docs.filter(doc => doc.data().category === currentCategory);
-    filtered.forEach((doc) => {
-        const data = doc.data();
-        const item = document.createElement('div');
-        item.setAttribute('data-doc-id', doc.id);
-        item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span></div>`;
-        const speakerIcon = item.querySelector('.speaker-icon');
-        if (speakerIcon) {
-            speakerIcon.addEventListener('click', () => {
-                if (data.audioUrl) {
-                    const audio = new Audio(data.audioUrl);
-                    audio.play();
-                } else {
-                    if ('speechSynthesis' in window) {
-                        const utterance = new SpeechSynthesisUtterance(data.chinese);
-                        utterance.lang = 'zh-CN';
-                        speechSynthesis.speak(utterance);
+
+    // Group by category
+    const grouped = {
+        "学习": [],
+        "工作": [],
+        "生活": []
+    };
+    filtered.forEach(doc => {
+        const cat = doc.data().category;
+        if (grouped[cat]) grouped[cat].push(doc);
+    });
+
+    // Sort within each group by timestamp
+    Object.keys(grouped).forEach(cat => {
+        grouped[cat].sort((a, b) => a.data().timestamp.toMillis() - b.data().timestamp.toMillis());
+    });
+
+    // Display in order: 学习 -> 工作 -> 生活
+    const order = ["学习", "工作", "生活"];
+    order.forEach(cat => {
+        grouped[cat].forEach((doc) => {
+            const data = doc.data();
+            const item = document.createElement('div');
+            item.setAttribute('data-doc-id', doc.id);
+            item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span></div>`;
+            const speakerIcon = item.querySelector('.speaker-icon');
+            if (speakerIcon) {
+                speakerIcon.addEventListener('click', () => {
+                    if (data.audioUrl) {
+                        const audio = new Audio(data.audioUrl);
+                        audio.play();
                     } else {
-                        alert('Web Speech API 在此浏览器中不受支持。');
+                        if ('speechSynthesis' in window) {
+                            const utterance = new SpeechSynthesisUtterance(data.chinese);
+                            utterance.lang = 'zh-CN';
+                            speechSynthesis.speak(utterance);
+                        } else {
+                            alert('Web Speech API 在此浏览器中不受支持。');
+                        }
                     }
-                }
-            });
-        }
-        const editIcon = item.querySelector('.edit-icon');
-        if (editIcon) {
-            editIcon.addEventListener('click', () => {
-                const docId = item.getAttribute('data-doc-id');
-                // Populate edit form with data
-                document.getElementById('edit-phrase-chinese').value = data.chinese;
-                document.getElementById('edit-phrase-meaning').value = data.meaning;
-                document.getElementById('edit-phrase-pinyin').value = data.pinyin;
-                document.getElementById('edit-phrase-category').value = data.category || '生活';
-                // Show edit modal
-                document.getElementById('edit-phrase-form').style.display = 'block';
-                // Store docId for submit
-                document.getElementById('edit-phrase-form-element').setAttribute('data-doc-id', docId);
-            });
-        }
-        list.appendChild(item);
+                });
+            }
+            const editIcon = item.querySelector('.edit-icon');
+            if (editIcon) {
+                editIcon.addEventListener('click', () => {
+                    const docId = item.getAttribute('data-doc-id');
+                    // Populate edit form with data
+                    document.getElementById('edit-phrase-chinese').value = data.chinese;
+                    document.getElementById('edit-phrase-meaning').value = data.meaning;
+                    document.getElementById('edit-phrase-pinyin').value = data.pinyin;
+                    document.getElementById('edit-phrase-category').value = data.category || '生活';
+                    // Show edit modal
+                    document.getElementById('edit-phrase-form').style.display = 'block';
+                    // Store docId for submit
+                    document.getElementById('edit-phrase-form-element').setAttribute('data-doc-id', docId);
+                });
+            }
+            list.appendChild(item);
+        });
     });
 
     // Move listen-all-btn to the end of phrase-list
