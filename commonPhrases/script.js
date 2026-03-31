@@ -86,14 +86,6 @@ const displayPhrases = (docs) => {
             list.appendChild(item);
         });
     });
-
-    // Move listen-all-btn to the end of phrase-list
-    const listenBtn = document.getElementById('listen-all-btn');
-    const playingMsg = document.getElementById('playing-message');
-    if (listenBtn && playingMsg) {
-        // list.appendChild(listenBtn);
-        list.appendChild(playingMsg);
-    }
 };
 
 // Show modal on + button click
@@ -130,7 +122,7 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
     const button = document.getElementById('listen-all-btn');
     const message = document.getElementById('playing-message');
     button.classList.add('dimmed');
-    message.style.display = 'block';
+    if (message) message.style.display = 'block';
     let ordered = [];
     if (currentCategory === "all") {
         const grouped = {
@@ -157,7 +149,7 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
     const playNext = () => {
         if (index >= ordered.length) {
             button.classList.remove('dimmed');
-            message.style.display = 'none';
+            if (message) message.style.display = 'none';
             isPlaying = false;
             return;
         }
