@@ -20,6 +20,11 @@ const uploadPreset = 'vocab_images';
 let currentCategory = "all";
 let phrases = [];
 let isPlaying = false;
+let previousPhraseId = null;
+
+function clearHighlight() {
+    document.querySelectorAll('.chinese-word').forEach(el => el.classList.remove('highlight', 'highlight-last'));
+}
 
 // Function to display phrases
 const displayPhrases = (docs) => {
@@ -50,7 +55,7 @@ const displayPhrases = (docs) => {
             const data = doc.data();
             const item = document.createElement('div');
             item.setAttribute('data-doc-id', doc.id);
-            item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span></div>`;
+            item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> <span id="phrase-${doc.id}" class="chinese-word">${data.chinese}</span> <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span></div>`;
             const speakerIcon = item.querySelector('.speaker-icon');
             if (speakerIcon) {
                 speakerIcon.addEventListener('click', () => {
@@ -123,6 +128,7 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
     const message = document.getElementById('playing-message');
     button.classList.add('dimmed');
     if (message) message.style.display = 'block';
+    clearHighlight();
     let ordered = [];
     if (currentCategory === "all") {
         const grouped = {
@@ -148,12 +154,29 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
     let index = 0;
     const playNext = () => {
         if (index >= ordered.length) {
+            clearHighlight();
             button.classList.remove('dimmed');
             if (message) message.style.display = 'none';
             isPlaying = false;
             return;
         }
         const data = ordered[index].data();
+        // Remove highlight from previous phrase
+        if (previousPhraseId) {
+            const prevSpan = document.getElementById(`phrase-${previousPhraseId}`);
+            if (prevSpan) prevSpan.classList.remove('highlight', 'highlight-last');
+        }
+        // Add highlight to current phrase
+        const currentSpan = document.getElementById(`phrase-${ordered[index].id}`);
+        if (currentSpan) {
+            if (index === ordered.length - 1) {
+                currentSpan.classList.add('highlight-last');
+            } else {
+                currentSpan.classList.add('highlight');
+            }
+            currentSpan.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+        previousPhraseId = ordered[index].id;
         if (data.audioUrl) {
             const audio = new Audio(data.audioUrl);
             audio.play();
