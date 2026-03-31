@@ -21,6 +21,7 @@ let currentCategory = "all";
 let phrases = [];
 let isPlaying = false;
 let previousPhraseId = null;
+let searchTerm = "";
 
 function clearHighlight() {
     document.querySelectorAll('.chinese-word').forEach(el => el.classList.remove('highlight', 'highlight-last'));
@@ -30,7 +31,12 @@ function clearHighlight() {
 const displayPhrases = (docs) => {
     const list = document.getElementById('phrase-list');
     list.innerHTML = '';
-    const filtered = currentCategory === "all" ? docs : docs.filter(doc => doc.data().category === currentCategory);
+    const filteredByCategory = currentCategory === "all" ? docs : docs.filter(doc => doc.data().category === currentCategory);
+    const filteredBySearch = filteredByCategory.filter(doc => {
+        const data = doc.data();
+        const term = searchTerm.toLowerCase();
+        return data.chinese.toLowerCase().includes(term) || data.meaning.toLowerCase().includes(term) || data.pinyin.toLowerCase().includes(term);
+    });
 
     // Group by category
     const grouped = {
@@ -38,7 +44,7 @@ const displayPhrases = (docs) => {
         "工作": [],
         "生活": []
     };
-    filtered.forEach(doc => {
+    filteredBySearch.forEach(doc => {
         const cat = doc.data().category;
         if (grouped[cat]) grouped[cat].push(doc);
     });
@@ -112,6 +118,12 @@ document.getElementById('close-edit-phrase-form').addEventListener('click', func
 // Category filter
 if (document.getElementById('category-filter')) document.getElementById('category-filter').addEventListener('change', (e) => {
     currentCategory = e.target.value;
+    displayPhrases(phrases);
+});
+
+// Search input
+if (document.getElementById('search-input')) document.getElementById('search-input').addEventListener('input', (e) => {
+    searchTerm = e.target.value;
     displayPhrases(phrases);
 });
 
