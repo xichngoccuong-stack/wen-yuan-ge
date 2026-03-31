@@ -167,7 +167,7 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
             audio.play();
             audio.onended = () => {
                 index++;
-                setTimeout(playNext, 2000);
+                setTimeout(playNext, 1000);
             };
         } else {
             if ('speechSynthesis' in window) {
@@ -176,7 +176,7 @@ if (document.getElementById('listen-all-btn')) document.getElementById('listen-a
                 speechSynthesis.speak(utterance);
                 utterance.onend = () => {
                     index++;
-                    setTimeout(playNext, 2000);
+                    setTimeout(playNext, 1000);
                 };
             }
         }
