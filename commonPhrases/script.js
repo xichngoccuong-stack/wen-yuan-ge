@@ -19,6 +19,7 @@ const uploadPreset = 'vocab_images';
 // Global variables
 let currentCategory = "all";
 let phrases = [];
+let isPlaying = false;
 
 // Function to display phrases
 const displayPhrases = (docs) => {
@@ -90,7 +91,7 @@ const displayPhrases = (docs) => {
     const listenBtn = document.getElementById('listen-all-btn');
     const playingMsg = document.getElementById('playing-message');
     if (listenBtn && playingMsg) {
-        list.appendChild(listenBtn);
+        // list.appendChild(listenBtn);
         list.appendChild(playingMsg);
     }
 };
@@ -124,19 +125,43 @@ if (document.getElementById('home-btn')) document.getElementById('home-btn').add
 
 // Listen all button
 if (document.getElementById('listen-all-btn')) document.getElementById('listen-all-btn').addEventListener('click', () => {
+    if (isPlaying) return;
+    isPlaying = true;
     const button = document.getElementById('listen-all-btn');
     const message = document.getElementById('playing-message');
     button.classList.add('dimmed');
     message.style.display = 'block';
-    const filtered = currentCategory === "all" ? phrases : phrases.filter(doc => doc.data().category === currentCategory);
+    let ordered = [];
+    if (currentCategory === "all") {
+        const grouped = {
+            "学习": [],
+            "工作": [],
+            "生活": []
+        };
+        phrases.forEach(doc => {
+            const cat = doc.data().category;
+            if (grouped[cat]) grouped[cat].push(doc);
+        });
+        Object.keys(grouped).forEach(cat => {
+            grouped[cat].sort((a, b) => a.data().timestamp.toMillis() - b.data().timestamp.toMillis());
+        });
+        const order = ["学习", "工作", "生活"];
+        order.forEach(cat => {
+            ordered = ordered.concat(grouped[cat]);
+        });
+    } else {
+        ordered = phrases.filter(doc => doc.data().category === currentCategory);
+        ordered.sort((a, b) => a.data().timestamp.toMillis() - b.data().timestamp.toMillis());
+    }
     let index = 0;
     const playNext = () => {
-        if (index >= filtered.length) {
+        if (index >= ordered.length) {
             button.classList.remove('dimmed');
             message.style.display = 'none';
+            isPlaying = false;
             return;
         }
-        const data = filtered[index].data();
+        const data = ordered[index].data();
         if (data.audioUrl) {
             const audio = new Audio(data.audioUrl);
             audio.play();

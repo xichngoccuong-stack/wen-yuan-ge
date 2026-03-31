@@ -72,6 +72,7 @@
             0% { left: -100%; }
             100% { left: 100%; }
         }
+        .dimmed { opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -89,6 +90,7 @@
             <option value="工作">工作</option>
             <option value="学习">学习</option>
         </select>
+        <button id="listen-all-btn" style="padding: 5px 10px; font-family: 'Ma Shan Zheng', sans-serif; background: transparent; color: white; border: 1px solid white; border-radius: 4px; cursor: pointer; position: relative; top: -8px; display: none;">听全部</button>
     </header>
 
     <!-- Add Phrase Form -->
@@ -149,8 +151,6 @@
     <div id="spinner" class="spinner"></div>
     <script src="script.js"></script>
 
-    
-    <button id="listen-all-btn" class="listen-btn" style="display: none;">听全部</button>
     <div id="playing-message" class="listen-btn" style="display: none; font-size: 20px; background: linear-gradient(to right, green, black); animation: none;">正在自动播放音频</div>
 
     <!-- Author Link -->
