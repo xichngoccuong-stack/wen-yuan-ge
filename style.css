@@ -396,3 +396,17 @@ h1 {
     margin: 0;
 }
 
+/* ===== HIGHLIGHT FOR PLAYING WORD ===== */
+.chinese-word.highlight {
+    border: 2px solid green;
+    border-radius: 3px;
+    padding: 2px;
+    background-color: rgba(0, 255, 0, 0.1);
+}
+.chinese-word.highlight-last {
+    border: 2px solid blue;
+    border-radius: 3px;
+    padding: 2px;
+    background-color: rgba(0, 0, 255, 0.1);
+}
+

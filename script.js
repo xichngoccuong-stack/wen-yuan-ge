@@ -62,7 +62,7 @@ Promise.all([
         filteredVocabularies.forEach((data) => {
             const item = document.createElement('div');
             item.setAttribute('data-doc-id', data.id);
-            item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> ${data.chinese} <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet && data.hanviet !== data.meaning ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
+            item.innerHTML = `<div style="text-align: center; font-size: 1.2em;"><span class="edit-icon" style="font-size: 0.8em;">✏️</span> <span id="chinese-${data.id}" class="chinese-word">${data.chinese}</span> <span class="speaker-icon" style="font-size: 0.8em;">🔊</span></div><div>含义: <span class="vietnam-style">${data.meaning}</span><br>拼音: <span class="vietnam-style">${data.pinyin}</span>${data.hanviet && data.hanviet !== data.meaning ? '<br>汉越音: <span class="vietnam-style">' + data.hanviet + '</span>' : ''}</div>`;
             const speakerIcon = item.querySelector('.speaker-icon');
             if (speakerIcon) {
                 speakerIcon.addEventListener('click', () => {
@@ -106,9 +106,16 @@ Promise.all([
     let playState = 'idle';
     let stopFlag = false;
     let playIndex = 0;
+    let previousVocabId = null;
+
+    function clearHighlight() {
+        document.querySelectorAll('.chinese-word').forEach(el => el.classList.remove('highlight', 'highlight-last'));
+    }
 
     const playNext = () => {
         if (stopFlag || playIndex >= currentFilteredVocabularies.length) {
+            clearHighlight();
+            previousVocabId = null;
             if (playIndex >= currentFilteredVocabularies.length) {
                 playState = 'idle';
                 const button = document.getElementById('listen-all-btn');
@@ -117,6 +124,22 @@ Promise.all([
             return;
         }
         const vocab = currentFilteredVocabularies[playIndex];
+        // Remove highlight from previous word
+        if (previousVocabId) {
+            const prevSpan = document.getElementById(`chinese-${previousVocabId}`);
+            if (prevSpan) prevSpan.classList.remove('highlight', 'highlight-last');
+        }
+        // Add highlight to current word
+        const currentSpan = document.getElementById(`chinese-${vocab.id}`);
+        if (currentSpan) {
+            if (playIndex === currentFilteredVocabularies.length - 1) {
+                currentSpan.classList.add('highlight-last');
+            } else {
+                currentSpan.classList.add('highlight');
+            }
+            currentSpan.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+        previousVocabId = vocab.id;
         if (vocab.audioUrl) {
             const audio = new Audio(vocab.audioUrl);
             audio.play();
@@ -180,16 +203,19 @@ Promise.all([
             stopFlag = false;
             playState = 'playing';
             button.textContent = '停止';
+            clearHighlight();
             playNext();
         } else if (playState === 'playing') {
             stopFlag = true;
             playState = 'stopped';
             button.textContent = '从头播放';
+            clearHighlight();
         } else if (playState === 'stopped') {
             playIndex = 0;
             stopFlag = false;
             playState = 'playing';
             button.textContent = '停止';
+            clearHighlight();
             playNext();
         }
     });
