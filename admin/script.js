@@ -127,9 +127,16 @@
             searchForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const keyword = document.getElementById('keyword').value.trim();
-                const startDate = document.getElementById('start-date').value;
-                const endDate = document.getElementById('end-date').value;
+                let startDate = document.getElementById('start-date').value;
+                let endDate = document.getElementById('end-date').value;
                 const noAudio = document.getElementById('no-audio').checked;
+
+                // If only one date is entered, set both to the same for single day search
+                if (startDate && !endDate) {
+                    endDate = startDate;
+                } else if (!startDate && endDate) {
+                    startDate = endDate;
+                }
 
                 // Validate dates
                 if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
