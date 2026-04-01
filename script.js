@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 Promise.all([
     new Promise(resolve => setTimeout(resolve, 2000)),
     document.fonts.ready,
-    db.collection('vocabularies').orderBy('meaning').get(),
+    db.collection('vocabularies').get(),
     db.collection('quiz-settings').doc('settings').get()
 ]).then(([_timeout, _fonts, querySnapshot, settingsDoc]) => {
     document.getElementById('image').style.display = 'none';
@@ -42,6 +42,8 @@ Promise.all([
     querySnapshot.forEach((doc) => {
         vocabularies.push({ id: doc.id, ...doc.data() });
     });
+
+    vocabularies.sort((a, b) => (a.pinyin || '').localeCompare(b.pinyin || ''));
 
     let includeGucu = true;
     if (settingsDoc.exists) {
@@ -176,7 +178,9 @@ Promise.all([
             const matchesCategory = category === '' || vocab.category === category;
             return matchesSearch && matchesCategory;
         });
+        filtered.sort((a, b) => (a.pinyin || '').localeCompare(b.pinyin || ''));
         displayVocabularies(filtered);
+        currentFilteredVocabularies = filtered;
     });
 
     // Category filter functionality
@@ -191,6 +195,7 @@ Promise.all([
             const matchesCategory = category === '' || vocab.category === category;
             return matchesSearch && matchesCategory;
         });
+        filtered.sort((a, b) => (a.pinyin || '').localeCompare(b.pinyin || ''));
         displayVocabularies(filtered);
         currentFilteredVocabularies = filtered;
     });
