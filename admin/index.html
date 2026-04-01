@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Vocabulary Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <div id="login-form" style="display: none;">
+        <h2>Admin Login</h2>
+        <input type="text" id="user" placeholder="User" required>
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Password" required>
+            <span id="toggle-password" class="toggle-icon">👁️</span>
+        </div>
+        <button id="login-btn">Login</button>
+    </div>
+
+    <div id="admin-content" style="display: none;">
+        <header>
+            <h2>Vocabulary Management</h2>
+            <button id="logout-btn">Logout</button>
+        </header>
+
+        <main>
+            <form id="search-form">
+                <input type="text" id="keyword" placeholder="Keyword (chinese or meaning)">
+                <input type="date" id="start-date" placeholder="Start Date">
+                <input type="date" id="end-date" placeholder="End Date">
+                <button type="submit">Search</button>
+            </form>
+
+            <div id="results"></div>
+        </main>
+    </div>
+</body>
+</html></content>
