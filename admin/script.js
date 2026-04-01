@@ -169,8 +169,8 @@
                     contentDiv.style.flex = '1';
                     contentDiv.innerHTML = `
                         <strong>${data.chinese}</strong><br>
-                        Meaning: ${data.meaning}<br>
-                        Date created: ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}
+                        ${data.meaning}<br>
+                        ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}
                         <hr>
                     `;
                     item.appendChild(contentDiv);
