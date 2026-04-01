@@ -125,6 +125,8 @@
                 results.innerHTML = '';
                 filteredVocabularies.forEach((data) => {
                     const item = document.createElement('div');
+                    item.style.display = 'flex';
+                    item.style.alignItems = 'center';
                     const addButton = document.createElement('button');
                     addButton.textContent = '+';
                     addButton.style.marginRight = '10px';
@@ -164,10 +166,11 @@
                     });
                     item.appendChild(addButton);
                     const contentDiv = document.createElement('div');
+                    contentDiv.style.flex = '1';
                     contentDiv.innerHTML = `
-                        <div><strong>${data.chinese}</strong></div>
-                        <div>Meaning: ${data.meaning}</div>
-                        <div>Date created: ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}</div>
+                        <strong>${data.chinese}</strong><br>
+                        Meaning: ${data.meaning}<br>
+                        Date created: ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}
                         <hr>
                     `;
                     item.appendChild(contentDiv);
