@@ -18,16 +18,31 @@ window.addEventListener('load', async () => {
     const settings = settingsDoc.data() || {};
     const category = settings.category || '全部';
     const includeGucu = settings.includeGucu || false;
+    const enableTestList = settings.enableTestList || false;
 
     // Load vocabularies
     let query = db.collection('vocabularies');
-    if (category !== '全部') {
-        query = query.where('category', '==', category);
-    } else if (!includeGucu) {
-        query = query.where('category', 'in', ['生活', '工作', '学习']);
+    if (!enableTestList) {
+        if (category !== '全部') {
+            query = query.where('category', '==', category);
+        } else if (!includeGucu) {
+            query = query.where('category', 'in', ['生活', '工作', '学习']);
+        }
     }
     const vocabSnapshot = await query.get();
-    const vocabularies = vocabSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    let vocabularies = vocabSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    if (enableTestList) {
+        const testListSnapshot = await db.collection('testList').get();
+        const testListChineses = new Set();
+        testListSnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.chinese) {
+                testListChineses.add(data.chinese);
+            }
+        });
+        vocabularies = vocabularies.filter(vocab => testListChineses.has(vocab.chinese));
+    }
 
     // Determine numWords
     let numWords;

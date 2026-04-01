@@ -44,6 +44,7 @@ async function loadQuizSettings() {
         quizSettings.numWords = data.numWords || null;
         quizSettings.category = data.category || '全部';
         quizSettings.includeGucu = data.includeGucu || false;
+        quizSettings.enableTestList = data.enableTestList || false;
     }
 }
 
@@ -55,11 +56,26 @@ async function loadVocabularies() {
         vocabularies.push({ id: doc.id, ...doc.data() });
     });
 
-    // Filter by category
-    if (quizSettings.category !== '全部') {
-        vocabularies = vocabularies.filter(vocab => vocab.category === quizSettings.category);
-    } else if (!quizSettings.includeGucu) {
-        vocabularies = vocabularies.filter(vocab => ['生活', '工作', '学习'].includes(vocab.category));
+    // If enableTestList, load testList and filter vocabularies
+    if (quizSettings.enableTestList) {
+        const testListSnapshot = await db.collection('testList').get();
+        const testListChineses = new Set();
+        testListSnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.chinese) {
+                testListChineses.add(data.chinese);
+            }
+        });
+        vocabularies = vocabularies.filter(vocab => testListChineses.has(vocab.chinese));
+    }
+
+    if (!quizSettings.enableTestList) {
+        // Filter by category
+        if (quizSettings.category !== '全部') {
+            vocabularies = vocabularies.filter(vocab => vocab.category === quizSettings.category);
+        } else if (!quizSettings.includeGucu) {
+            vocabularies = vocabularies.filter(vocab => ['生活', '工作', '学习'].includes(vocab.category));
+        }
     }
 
     // Shuffle and take numWords
