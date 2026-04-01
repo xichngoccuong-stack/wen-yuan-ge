@@ -68,7 +68,7 @@ body {
 .toggle-icon {
     position: absolute;
     right: 10px;
-    top: 50%;
+    top: 37%;
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 18px;

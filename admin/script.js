@@ -102,6 +102,11 @@
             });
 
             function displayVocabularies(filteredVocabularies) {
+                // Sort by timestamp descending
+                filteredVocabularies.sort((a, b) => {
+                    if (!a.timestamp || !b.timestamp) return 0;
+                    return b.timestamp.toDate() - a.timestamp.toDate();
+                });
                 results.innerHTML = '';
                 filteredVocabularies.forEach((data) => {
                     const item = document.createElement('div');
@@ -110,7 +115,7 @@
                         <div>Meaning: ${data.meaning}</div>
                         <div>Pinyin: ${data.pinyin}</div>
                         ${data.hanviet ? `<div>Hanviet: ${data.hanviet}</div>` : ''}
-                        <div>Date created: ${data.createdAt ? data.createdAt.toDate().toLocaleDateString() : 'N/A'}</div>
+                        <div>Date created: ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}</div>
                         <hr>
                     `;
                     results.appendChild(item);
@@ -140,8 +145,8 @@
 
                 if (startDate || endDate) {
                     filtered = filtered.filter(vocab => {
-                        if (!vocab.createdAt) return false;
-                        const date = vocab.createdAt.toDate();
+                        if (!vocab.timestamp) return false;
+                        const date = vocab.timestamp.toDate();
                         const start = startDate ? new Date(startDate) : null;
                         const end = endDate ? new Date(endDate) : null;
                         if (start && date < start) return false;
