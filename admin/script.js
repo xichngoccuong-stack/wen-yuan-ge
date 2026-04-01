@@ -15,6 +15,7 @@
         const db = firebase.firestore();
 
         document.addEventListener('DOMContentLoaded', function() {
+            let activateBtn;
             const loginForm = document.getElementById('login-form');
             const adminContent = document.getElementById('admin-content');
             const searchForm = document.getElementById('search-form');
@@ -116,7 +117,7 @@
                 // Add activate button
                 const testListPanel = document.getElementById('testList-panel');
                 const h3 = testListPanel.querySelector('h3');
-                const activateBtn = document.createElement('button');
+                activateBtn = document.createElement('button');
                 activateBtn.textContent = enableTestList ? 'Deactivate Test List' : 'Activate Test List';
                 activateBtn.addEventListener('click', async () => {
                     try {
@@ -133,6 +134,7 @@
                     }
                 });
                 h3.insertAdjacentElement('afterend', activateBtn);
+                activateBtn.style.display = testListSnapshot.size === 0 ? 'none' : 'block';
             }).catch((error) => {
                 console.error('Error loading vocabularies:', error);
                 results.innerHTML = '<p>Error loading vocabularies.</p>';
@@ -247,6 +249,9 @@
                 });
                 if (testListSnapshot.size === 0) {
                     testListDiv.innerHTML = '<p>No test list items.</p>';
+                }
+                if (activateBtn) {
+                    activateBtn.style.display = testListSnapshot.size === 0 ? 'none' : 'block';
                 }
             }
 
