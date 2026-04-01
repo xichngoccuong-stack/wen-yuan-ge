@@ -235,6 +235,7 @@
                 let startDate = document.getElementById('start-date').value;
                 let endDate = document.getElementById('end-date').value;
                 const noAudio = document.getElementById('no-audio').checked;
+                const category = document.getElementById('category-filter').value;
 
                 // If only one date is entered, set both to the same for single day search
                 if (startDate && !endDate) {
@@ -274,6 +275,10 @@
 
                 if (noAudio) {
                     filtered = filtered.filter(vocab => !vocab.audioUrl || vocab.audioUrl === '');
+                }
+
+                if (category) {
+                    filtered = filtered.filter(vocab => vocab.category === category);
                 }
 
                 displayVocabularies(filtered);
