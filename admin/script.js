@@ -78,6 +78,7 @@
 
             // Load vocabularies, settings, and testList
             let vocabularies = [];
+            let enableTestList = false;
             Promise.all([
                 db.collection('vocabularies').get(),
                 db.collection('quiz-settings').doc('settings').get(),
@@ -91,6 +92,7 @@
                 if (settingsDoc.exists) {
                     const data = settingsDoc.data();
                     includeGucu = data.includeGucu !== false;
+                    enableTestList = data.enableTestList || false;
                 }
                 if (!includeGucu) {
                     vocabularies = vocabularies.filter(vocab => vocab.category !== '古词');
@@ -111,6 +113,26 @@
                 // Display all vocabularies initially
                 displayVocabularies(vocabularies);
                 displayTestList(testListSnapshot);
+                // Add activate button
+                const testListPanel = document.getElementById('testList-panel');
+                const h3 = testListPanel.querySelector('h3');
+                const activateBtn = document.createElement('button');
+                activateBtn.textContent = enableTestList ? 'Deactivate Test List' : 'Activate Test List';
+                activateBtn.addEventListener('click', async () => {
+                    try {
+                        await db.collection('quiz-settings').doc('settings').set({
+                            enableTestList: !enableTestList
+                        }, { merge: true });
+                        enableTestList = !enableTestList;
+                        activateBtn.textContent = enableTestList ? 'Deactivate Test List' : 'Activate Test List';
+                        notification.textContent = enableTestList ? 'Test List Activated!' : 'Test List Deactivated!';
+                        notification.style.display = 'block';
+                        setTimeout(() => notification.style.display = 'none', 1000);
+                    } catch (error) {
+                        alert('Error updating: ' + error.message);
+                    }
+                });
+                h3.insertAdjacentElement('afterend', activateBtn);
             }).catch((error) => {
                 console.error('Error loading vocabularies:', error);
                 results.innerHTML = '<p>Error loading vocabularies.</p>';
