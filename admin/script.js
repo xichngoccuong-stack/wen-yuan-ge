@@ -113,8 +113,6 @@
                     item.innerHTML = `
                         <div><strong>${data.chinese}</strong></div>
                         <div>Meaning: ${data.meaning}</div>
-                        <div>Pinyin: ${data.pinyin}</div>
-                        ${data.hanviet ? `<div>Hanviet: ${data.hanviet}</div>` : ''}
                         <div>Date created: ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}</div>
                         <hr>
                     `;
@@ -131,6 +129,13 @@
                 const keyword = document.getElementById('keyword').value.trim();
                 const startDate = document.getElementById('start-date').value;
                 const endDate = document.getElementById('end-date').value;
+                const noAudio = document.getElementById('no-audio').checked;
+
+                // Validate dates
+                if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+                    alert('Start date cannot be greater than end date.');
+                    return;
+                }
 
                 let filtered = vocabularies;
 
@@ -146,13 +151,17 @@
                 if (startDate || endDate) {
                     filtered = filtered.filter(vocab => {
                         if (!vocab.timestamp) return false;
-                        const date = vocab.timestamp.toDate();
-                        const start = startDate ? new Date(startDate) : null;
-                        const end = endDate ? new Date(endDate) : null;
-                        if (start && date < start) return false;
-                        if (end && date > end) return false;
+                        const vocabDate = new Date(vocab.timestamp.toDate().toDateString());
+                        const start = startDate ? new Date(new Date(startDate).toDateString()) : null;
+                        const end = endDate ? new Date(new Date(endDate).toDateString()) : null;
+                        if (start && vocabDate < start) return false;
+                        if (end && vocabDate > end) return false;
                         return true;
                     });
+                }
+
+                if (noAudio) {
+                    filtered = filtered.filter(vocab => !vocab.audioUrl || vocab.audioUrl === '');
                 }
 
                 displayVocabularies(filtered);

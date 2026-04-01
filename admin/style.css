@@ -164,6 +164,20 @@ body {
     background: #555;
 }
 
+.search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
 #results {
     max-height: 400px;
     overflow-y: auto;
@@ -171,9 +185,14 @@ body {
     border-radius: 5px;
     padding: 10px;
     background: #222;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 #results div {
+    flex: 1 1 200px;
+    min-width: 150px;
     padding: 10px;
     margin-bottom: 10px;
     border-bottom: 1px solid #333;
