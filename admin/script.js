@@ -184,7 +184,40 @@
                 testListSnapshot.forEach((doc) => {
                     const data = doc.data();
                     const item = document.createElement('div');
-                    item.innerHTML = `${data.chinese}: ${data.meaning}`;
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = '-';
+                    removeBtn.style.marginRight = '5px';
+                    removeBtn.addEventListener('click', async () => {
+                        try {
+                            await db.collection('testList').doc(doc.id).delete();
+                            const newSnapshot = await db.collection('testList').get();
+                            displayTestList(newSnapshot);
+                            // Also reload vocabularies to add back the removed one
+                            const newVocabSnapshot = await db.collection('vocabularies').get();
+                            let newVocabularies = [];
+                            newVocabSnapshot.forEach((doc) => {
+                                newVocabularies.push({ id: doc.id, ...doc.data() });
+                            });
+                            // Filter out from testList
+                            const newTestListSnapshot = await db.collection('testList').get();
+                            const newTestListChineses = new Set();
+                            newTestListSnapshot.forEach((doc) => {
+                                const data = doc.data();
+                                if (data.chinese) {
+                                    newTestListChineses.add(data.chinese);
+                                }
+                            });
+                            newVocabularies = newVocabularies.filter(vocab => !newTestListChineses.has(vocab.chinese));
+                            vocabularies = newVocabularies;
+                            displayVocabularies(vocabularies);
+                        } catch (error) {
+                            alert('Error removing: ' + error.message);
+                        }
+                    });
+                    item.appendChild(removeBtn);
+                    const content = document.createElement('span');
+                    content.innerHTML = `${data.chinese}: ${data.meaning}`;
+                    item.appendChild(content);
                     testListDiv.appendChild(item);
                 });
                 if (testListSnapshot.size === 0) {
