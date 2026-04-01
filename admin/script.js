@@ -58,6 +58,20 @@
                 }
             });
 
+            // Add Enter key support for login
+            const userInput = document.getElementById('user');
+            const passwordInput = document.getElementById('password');
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('login-btn').click();
+                }
+            });
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('login-btn').click();
+                }
+            });
+
             // Logout
             logoutBtn.addEventListener('click', () => {
                 localStorage.removeItem('isLoggedIn');
