@@ -20,6 +20,7 @@
             const searchForm = document.getElementById('search-form');
             const results = document.getElementById('results');
             const logoutBtn = document.getElementById('logout-btn');
+            const notification = document.getElementById('notification');
 
             // Check auth state
             function checkAuthState() {
@@ -75,12 +76,13 @@
                 }
             });
 
-            // Load vocabularies and settings
+            // Load vocabularies, settings, and testList
             let vocabularies = [];
             Promise.all([
                 db.collection('vocabularies').get(),
-                db.collection('quiz-settings').doc('settings').get()
-            ]).then(([querySnapshot, settingsDoc]) => {
+                db.collection('quiz-settings').doc('settings').get(),
+                db.collection('testList').get()
+            ]).then(([querySnapshot, settingsDoc, testListSnapshot]) => {
                 querySnapshot.forEach((doc) => {
                     vocabularies.push({ id: doc.id, ...doc.data() });
                 });
@@ -94,8 +96,21 @@
                     vocabularies = vocabularies.filter(vocab => vocab.category !== '古词');
                 }
 
+                // Get chinese from testList
+                const testListChineses = new Set();
+                testListSnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.chinese) {
+                        testListChineses.add(data.chinese);
+                    }
+                });
+
+                // Filter vocabularies not in testList
+                vocabularies = vocabularies.filter(vocab => !testListChineses.has(vocab.chinese));
+
                 // Display all vocabularies initially
                 displayVocabularies(vocabularies);
+                displayTestList(testListSnapshot);
             }).catch((error) => {
                 console.error('Error loading vocabularies:', error);
                 results.innerHTML = '<p>Error loading vocabularies.</p>';
@@ -110,16 +125,70 @@
                 results.innerHTML = '';
                 filteredVocabularies.forEach((data) => {
                     const item = document.createElement('div');
-                    item.innerHTML = `
+                    const addButton = document.createElement('button');
+                    addButton.textContent = '+';
+                    addButton.style.marginRight = '10px';
+                    addButton.addEventListener('click', async () => {
+                        try {
+                            await db.collection('testList').add({
+                                meaning: data.meaning,
+                                chinese: data.chinese
+                            });
+                            notification.textContent = 'Added to testList!';
+                            notification.style.display = 'block';
+                            setTimeout(() => notification.style.display = 'none', 1000);
+                            // Reload and display testList
+                            const newSnapshot = await db.collection('testList').get();
+                            displayTestList(newSnapshot);
+                            // Also reload vocabularies to filter out the added one
+                            const newVocabSnapshot = await db.collection('vocabularies').get();
+                            let newVocabularies = [];
+                            newVocabSnapshot.forEach((doc) => {
+                                newVocabularies.push({ id: doc.id, ...doc.data() });
+                            });
+                            // Filter out from testList
+                            const newTestListSnapshot = await db.collection('testList').get();
+                            const newTestListChineses = new Set();
+                            newTestListSnapshot.forEach((doc) => {
+                                const data = doc.data();
+                                if (data.chinese) {
+                                    newTestListChineses.add(data.chinese);
+                                }
+                            });
+                            newVocabularies = newVocabularies.filter(vocab => !newTestListChineses.has(vocab.chinese));
+                            vocabularies = newVocabularies;
+                            displayVocabularies(vocabularies);
+                        } catch (error) {
+                            alert('Error adding: ' + error.message);
+                        }
+                    });
+                    item.appendChild(addButton);
+                    const contentDiv = document.createElement('div');
+                    contentDiv.innerHTML = `
                         <div><strong>${data.chinese}</strong></div>
                         <div>Meaning: ${data.meaning}</div>
                         <div>Date created: ${data.timestamp ? data.timestamp.toDate().toLocaleDateString() : 'N/A'}</div>
                         <hr>
                     `;
+                    item.appendChild(contentDiv);
                     results.appendChild(item);
                 });
                 if (filteredVocabularies.length === 0) {
                     results.innerHTML = '<p>No vocabulary found.</p>';
+                }
+            }
+
+            function displayTestList(testListSnapshot) {
+                const testListDiv = document.getElementById('testList');
+                testListDiv.innerHTML = '';
+                testListSnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const item = document.createElement('div');
+                    item.innerHTML = `${data.chinese}: ${data.meaning}`;
+                    testListDiv.appendChild(item);
+                });
+                if (testListSnapshot.size === 0) {
+                    testListDiv.innerHTML = '<p>No test list items.</p>';
                 }
             }
 

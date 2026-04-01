@@ -27,16 +27,24 @@
             <button id="logout-btn">Logout</button>
         </header>
 
-        <main>
-            <form id="search-form" class="search-row">
-                <input type="text" id="keyword" placeholder="Keyword">
-                <input type="date" id="start-date" placeholder="Start Date">
-                <input type="date" id="end-date" placeholder="End Date">
-                <label class="checkbox-label"><input type="checkbox" id="no-audio"> No Audio</label>
-                <button type="submit">Search</button>
-            </form>
+        <div id="notification" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: green; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">Success</div>
 
-            <div id="results"></div>
+        <main style="display: flex;">
+            <div id="testList-panel" style="flex: 1; padding: 10px; border-right: 1px solid #ccc;">
+                <h3>Test List</h3>
+                <div id="testList"></div>
+            </div>
+            <div style="flex: 3; padding: 10px;">
+                <form id="search-form" class="search-row">
+                    <input type="text" id="keyword" placeholder="Keyword">
+                    <input type="date" id="start-date" placeholder="Start Date">
+                    <input type="date" id="end-date" placeholder="End Date">
+                    <label class="checkbox-label"><input type="checkbox" id="no-audio"> No Audio</label>
+                    <button type="submit">Search</button>
+                </form>
+
+                <div id="results"></div>
+            </div>
         </main>
     </div>
 </body>
